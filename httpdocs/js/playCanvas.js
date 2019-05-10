@@ -39,7 +39,7 @@ function boilerPlate()
     app.root.addChild(light);
 
     // Set up initial positions and orientations
-    camera.setPosition(0, 0, 3);
+    camera.setPosition(0, 0, 10);
     light.setEulerAngles(45, 0, 0);
 
     // Resize the canvas when the window is resized
@@ -66,6 +66,14 @@ async function serverWork()
             tempEntity.addComponent('model', {
                 type: entity.model
             });
+        }
+
+        if(entity.assetFilePath)
+        {
+            app.assets.loadFromUrl(entity.assetFilePath, "model", function (err, jsonData) {
+                tempEntity.model.asset = jsonData;
+            }); 
+
         }
    
         if(entity.name)
@@ -115,7 +123,5 @@ async function serverWork()
         // Add to hierarchy
         app.root.addChild(tempEntity);
     }
-
-    console.log(app.scripts.list());
 }
  
