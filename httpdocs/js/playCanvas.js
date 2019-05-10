@@ -73,7 +73,6 @@ async function serverWork()
             app.assets.loadFromUrl(entity.assetFilePath, "model", function (err, jsonData) {
                 tempEntity.model.asset = jsonData;
             }); 
-
         }
    
         if(entity.name)
@@ -99,25 +98,10 @@ async function serverWork()
             var tempScript = pc.createScript(scriptName);
             tempScript.prototype.update = function (dt) {
                 eval(entity.script);
-                console.log(entity.name)
             };
             
             tempEntity.addComponent('script');
-            tempEntity.script.create(tempScript);
-            console.log(tempEntity.script);
-            
-            /*
-            var tempScript = pc.createScript(scriptName);
-            console.log(entity.script);
-
-            tempScript.prototype.update = function (dt) {
-                eval(entity.script);
-                console.log(entity.script);
-            };
-
-            tempEntity.addComponent("script");
-            tempEntity.script.create(tempScript);
-            */
+            tempEntity.script.create(tempScript);            
         }
 
         // Add to hierarchy

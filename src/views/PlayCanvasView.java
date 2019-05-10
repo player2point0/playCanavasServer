@@ -41,30 +41,28 @@ public class PlayCanvasView extends DynamicWebPage {
             
             JSONObject entity1 = new JSONObject();
             JSONObject entity2 = new JSONObject();
-            JSONObject entity3 = new JSONObject();
             
             entity1.put("model", "asset");
             entity1.put("assetFilePath", "./Hovership/Hovership.json");//"./model.json");
             entity1.put("name", "box1");
-            entity1.put("x", 0);
+            entity1.put("x", 5);
             entity1.put("y", 0);
             entity1.put("z", 0);
             entity1.put("scriptName", "rotate1");
             entity1.put("script", "this.entity.rotate(0, 10 * dt, 0);");
-            /*
+            
             entity2.put("model", "box");
             entity2.put("name", "box2");
-            entity2.put("x", -1);
+            entity2.put("x", -5);
             entity2.put("y", 0);
             entity2.put("z", 0);
             entity2.put("scriptName", "rotate2");
             entity2.put("script", "this.entity.rotate(0, 100 * dt, 0);");
-            */
-            entities.put(0, entity1);
-            //entities.put(1, entity2);
+            
+            entities.put(1, entity1);
+            entities.put(0, entity2);
             responseData.put("entities", entities);
-            
-            
+                    
             responseData.put("time", System.currentTimeMillis()); 
             
             toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_HTML, responseData.toString() );
