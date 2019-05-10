@@ -57,6 +57,9 @@ async function serverWork()
     {
         var entity = entities[i];
         var tempEntity = new pc.Entity();
+        var x = 0;
+        var y = 0;
+        var z = 0;
 
         if(entity.model)
         {
@@ -64,9 +67,17 @@ async function serverWork()
                 type: entity.model
             });
         }
+   
+        if(entity.name)
+        {
+            tempEntity.name = entity.name;
+        }
 
-        // Add to hierarchy
-        app.root.addChild(tempEntity);
+        if(entity.x) x = entity.x;
+        if(entity.y) y = entity.y;
+        if(entity.z) z = entity.z;
+
+        tempEntity.setPosition(x, y, z);
 
         if(entity.script)
         {
@@ -76,15 +87,35 @@ async function serverWork()
             {
                 scriptName = entity.scriptName;
             }
-
+            
             var tempScript = pc.createScript(scriptName);
             tempScript.prototype.update = function (dt) {
                 eval(entity.script);
+                console.log(entity.name)
+            };
+            
+            tempEntity.addComponent('script');
+            tempEntity.script.create(tempScript);
+            console.log(tempEntity.script);
+            
+            /*
+            var tempScript = pc.createScript(scriptName);
+            console.log(entity.script);
+
+            tempScript.prototype.update = function (dt) {
+                eval(entity.script);
+                console.log(entity.script);
             };
 
-            tempEntity.addComponent('script');
-            tempEntity.script.create(scriptName);
+            tempEntity.addComponent("script");
+            tempEntity.script.create(tempScript);
+            */
         }
+
+        // Add to hierarchy
+        app.root.addChild(tempEntity);
     }
+
+    console.log(app.scripts.list());
 }
  
