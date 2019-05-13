@@ -68,12 +68,38 @@ async function serverWork()
             });
         }
 
-        if(entity.assetFilePath)
+        if(entity.vertexData)
         {
-            app.assets.loadFromUrl(entity.assetFilePath, "model", function (err, jsonData) {
-                tempEntity.model.asset = jsonData;
-            }); 
+            console.log(entity.vertexData);
+
+            var VertexTest = pc.createScript('vertexTest');
+
+            VertexTest.prototype.initialize = function() {
+                    
+                var node = new pc.GraphNode();
+                var material = new pc.StandardMaterial();
+                //this.normals = pc.calculateNormals(this.positions, this.indices);
+
+                var mesh = pc.createMesh(this.app.graphicsDevice, entity.vertexData.position, {
+                    normals: entity.vertexData.normals,
+                    uvs: entity.vertexData.uvs,
+                    indices: entity.vertexData.indices
+                });
+                
+                var meshInstance = new pc.MeshInstance(node, mesh, material);
+                
+                var model = new pc.Model();
+                model.graph = node;
+                model.meshInstances.push(meshInstance);
+                this.entity.model.model = model;
+
+                console.log(model);
+            };
+
+            tempEntity.addComponent('script');
+            tempEntity.script.create(VertexTest);         
         }
+
    
         if(entity.name)
         {
