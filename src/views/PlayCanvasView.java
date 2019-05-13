@@ -22,6 +22,7 @@ public class PlayCanvasView extends DynamicWebPage {
             String stringToSendToWebBrowser = "<html>\n" + 
         			"<head>"+
             			"<script src=\"https://code.playcanvas.com/playcanvas-latest.js\"></script>\n" + 
+            			"<script src=\"./js/JavaEntity.js\"></script>\n" + 
             		"</head>"+
             		"<body>\n" + 
             		"<canvas id=\"application-canvas\"></canvas>\n" + 
@@ -41,7 +42,10 @@ public class PlayCanvasView extends DynamicWebPage {
             JSONObject entity1 = new JSONObject();
             JSONObject vertexData = new JSONObject();
             
-            double[] positionsArr = new double[] {2, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0 };
+            double[] positionsArr = new double[] {1 * Math.random(), 1 * Math.random(), 0,
+            		-1 * Math.random(), 1 * Math.random(), 0,
+            		-1 * Math.random(), -1 * Math.random(), 0,
+            		1 * Math.random(), -1 * Math.random(), 0 };
             JSONArray positions = new JSONArray(positionsArr);     
             double[] normalsArr = new double[] {0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1};
             JSONArray normals = new JSONArray(normalsArr);
@@ -60,7 +64,7 @@ public class PlayCanvasView extends DynamicWebPage {
             entity1.put("x", 0);
             entity1.put("y", 0);
             entity1.put("z", 0);
-            //entity1.put("realtimeModel", true);
+            entity1.put("realtimeModel", true);
             entity1.put("vertexData", vertexData);
             //entity1.put("scriptName", "rotate1");
             //entity1.put("script", "this.entity.rotate(0, 10 * dt, 0);");
@@ -82,7 +86,10 @@ public class PlayCanvasView extends DynamicWebPage {
             JSONObject entity1 = new JSONObject();
             JSONObject vertexData = new JSONObject();
             
-            double[] positionsArr = new double[] {2, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0 };
+            double[] positionsArr = new double[] {1 * Math.random(), 1 * Math.random(), 0,
+            		-1 * Math.random(), 1 * Math.random(), 0,
+            		-1 * Math.random(), -1 * Math.random(), 0,
+            		1 * Math.random(), -1 * Math.random(), 0 };
             JSONArray positions = new JSONArray(positionsArr);     
             double[] normalsArr = new double[] {0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1};
             JSONArray normals = new JSONArray(normalsArr);
@@ -96,15 +103,8 @@ public class PlayCanvasView extends DynamicWebPage {
             vertexData.put("uvs", uvs);
             vertexData.put("indices", indicies);
             
-            entity1.put("model", "asset");
             entity1.put("name", "box1");
-            entity1.put("x", 0);
-            entity1.put("y", 0);
-            entity1.put("z", 0);
-            //entity1.put("realtimeModel", true);
             entity1.put("vertexData", vertexData);
-            //entity1.put("scriptName", "rotate1");
-            //entity1.put("script", "this.entity.rotate(0, 10 * dt, 0);");
             
             entities.put(0, entity1);
             responseData.put("entities", entities);

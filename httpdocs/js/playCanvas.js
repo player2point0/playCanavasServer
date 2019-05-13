@@ -1,9 +1,13 @@
 var canvas;
 var app;
 const url = "http://localhost:8080/";
+const loopDelay = 1000;
+var entities = [];
+
 
 boilerPlate();
 serverWork();
+loop();
 
 async function getServerData(endpoint)
 {
@@ -51,86 +55,33 @@ function boilerPlate()
 async function serverWork()
 {
     var startData = await getServerData("playCanvasStart");
-    var entities = startData.entities;    
+    var serverEntities = startData.entities;    
 
-    for(var i = 0;i<entities.length;i++)
+    for(var i = 0;i<serverEntities.length;i++)
     {
-        var entity = entities[i];
-        var tempEntity = new pc.Entity();
-        var x = 0;
-        var y = 0;
-        var z = 0;
-
-        if(entity.model)
-        {
-            tempEntity.addComponent('model', {
-                type: entity.model
-            });
-        }
-
-        if(entity.vertexData)
-        {
-            console.log(entity.vertexData);
-
-            var VertexTest = pc.createScript('vertexTest');
-
-            VertexTest.prototype.initialize = function() {
-                    
-                var node = new pc.GraphNode();
-                var material = new pc.StandardMaterial();
-                //this.normals = pc.calculateNormals(this.positions, this.indices);
-
-                var mesh = pc.createMesh(this.app.graphicsDevice, entity.vertexData.position, {
-                    normals: entity.vertexData.normals,
-                    uvs: entity.vertexData.uvs,
-                    indices: entity.vertexData.indices
-                });
-                
-                var meshInstance = new pc.MeshInstance(node, mesh, material);
-                
-                var model = new pc.Model();
-                model.graph = node;
-                model.meshInstances.push(meshInstance);
-                this.entity.model.model = model;
-
-                console.log(model);
-            };
-
-            tempEntity.addComponent('script');
-            tempEntity.script.create(VertexTest);         
-        }
-
-   
-        if(entity.name)
-        {
-            tempEntity.name = entity.name;
-        }
-
-        if(entity.x) x = entity.x;
-        if(entity.y) y = entity.y;
-        if(entity.z) z = entity.z;
-
-        tempEntity.setPosition(x, y, z);
-
-        if(entity.script)
-        {
-            var scriptName = "default"; 
-
-            if(entity.scriptName)
-            {
-                scriptName = entity.scriptName;
-            }
-            
-            var tempScript = pc.createScript(scriptName);
-            tempScript.prototype.update = function (dt) {
-                eval(entity.script);
-            };
-            
-            tempEntity.addComponent('script');
-            tempEntity.script.create(tempScript);            
-        }
-
-        // Add to hierarchy
-        app.root.addChild(tempEntity);
+        var entity = serverEntities[i];
+        var newEntity = new JavaEntity(entity, app);
+        entities.push(newEntity);
     }
+}
+
+async function loop()
+{
+    var loopData = await getServerData("playCanvasUpdate");
+    var loopEntities = loopData.entities;
+
+    //match names
+    for(var i = 0;i<loopEntities.length;i++)
+    {
+        for(var j = 0;j<entities.length;j++)
+        {
+            if(loopEntities[i].name == entities[j].Entity.name)
+            {
+                entities[j].setModel(loopEntities[i].vertexData);         
+                break;
+            }
+        }
+    }
+
+    setTimeout(loop, loopDelay);
 }
