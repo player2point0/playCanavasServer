@@ -1,1 +1,1 @@
-# csc1009
+#play canvas streaming server for AI chatbot
