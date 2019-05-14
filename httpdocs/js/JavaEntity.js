@@ -30,13 +30,13 @@ class JavaEntity
                 currentClass.material = new pc.StandardMaterial();
                 //this.normals = pc.calculateNormals(this.positions, this.indices);
     
-                var mesh = pc.createMesh(this.app.graphicsDevice, entityData.vertexData.position, {
+                currentClass.mesh = pc.createMesh(this.app.graphicsDevice, entityData.vertexData.position, {
                     normals: entityData.vertexData.normals,
                     uvs: entityData.vertexData.uvs,
                     indices: entityData.vertexData.indices
                 });
                 
-                var meshInstance = new pc.MeshInstance(currentClass.node, mesh, currentClass.material);
+                var meshInstance = new pc.MeshInstance(currentClass.node, currentClass.mesh, currentClass.material);
                 
                 var model = new pc.Model();
                 model.graph = currentClass.node;
@@ -91,24 +91,22 @@ class JavaEntity
 
     changeMesh(vertexData)
     {
-        this.app.scene.removeModel(this.Entity.model.model);
+        //remove the previous graphic buffers from the graphics device
+        this.mesh.indexBuffer[0].destroy();
+        this.mesh.vertexBuffer.destroy();
 
-        //this.normals = pc.calculateNormals(this.positions, this.indices);
-
-        var mesh = pc.createMesh(this.app.graphicsDevice, vertexData.position, {
+        this.mesh = pc.createMesh(this.app.graphicsDevice, vertexData.position, {
             normals: vertexData.normals,
             uvs: vertexData.uvs,
             indices: vertexData.indices
         });
-        
-        var meshInstance = new pc.MeshInstance(this.node, mesh, this.material);
-        
-        var model = new pc.Model();
-        model.graph = this.node;
-        model.meshInstances.push(meshInstance);
-        this.Entity.model.model = model;//the entity that the script is attatched to
+                
+        this.Entity.model.model.meshInstances[0].mesh = this.mesh;
 
-        this.app.scene.addModel(this.Entity.model.model);
+        //console.log(this.Entity.model.model.meshInstances[0].mesh);
+        
+        //console.log(this.app.graphicsDevice.buffers);
+
     }
 
 }

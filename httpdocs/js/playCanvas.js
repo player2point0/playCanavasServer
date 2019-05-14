@@ -1,13 +1,12 @@
 var canvas;
 var app;
 const url = "http://localhost:8080/";
-const loopDelay = 0;
+const loopDelay = 10;//takes about 15 for server response
 var entities = [];
 
-var lastTime = 0;
+var lastTime = Date.now();
 var total = 0;
 var count = 0;
-
 
 boilerPlate();
 serverWork();
@@ -15,14 +14,7 @@ setTimeout(loop, loopDelay);
 
 async function getServerData(endpoint)
 {
-    var startTime = Date.now();
-
     let response = await fetch(url+endpoint);
-    
-    var endTime = Date.now();
-    total += endTime - startTime;
-    count++;
-    console.log(total / count);
     
     let data = await response.json();
 
@@ -79,6 +71,13 @@ async function serverWork()
 
 async function loop()
 {
+    var endTime = Date.now(); 
+    total += endTime - lastTime;
+    count++;
+    console.log(total / count);
+
+    lastTime = endTime;
+
     var loopData = await getServerData("playCanvasUpdate");
     var loopEntities = loopData.entities;
 
@@ -95,5 +94,6 @@ async function loop()
             }
         }
     }
+    
     setTimeout(loop, loopDelay);
 }
