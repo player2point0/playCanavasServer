@@ -1,7 +1,7 @@
 var canvas;
 var app;
 const url = "http://localhost:8080/";
-const loopDelay = 10;//takes about 15 for server response
+const loopDelay = 0;//takes about 15 for server response
 var entities = [];
 
 var lastTime = Date.now();
@@ -94,6 +94,6 @@ async function loop()
             }
         }
     }
-    
+
     setTimeout(loop, loopDelay);
 }

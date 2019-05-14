@@ -100,13 +100,11 @@ class JavaEntity
             uvs: vertexData.uvs,
             indices: vertexData.indices
         });
-                
+
         this.Entity.model.model.meshInstances[0].mesh = this.mesh;
-
+ 
         //console.log(this.Entity.model.model.meshInstances[0].mesh);
-        
         //console.log(this.app.graphicsDevice.buffers);
-
     }
 
 }

@@ -105,8 +105,8 @@ public class Main
 			
 			for (int i = 0; i < requestToProcess.size(); i++) 
 			{
-				if(i==0)
-					System.out.println("NumRequests per loop:"+requestToProcess.size()+" Num active threads:"+Thread.activeCount()+" FreeMemory:"+Runtime.getRuntime().freeMemory());
+				//if(i==0)
+					//System.out.println("NumRequests per loop:"+requestToProcess.size()+" Num active threads:"+Thread.activeCount()+" FreeMemory:"+Runtime.getRuntime().freeMemory());
 		        WebRequest toProcess = requestToProcess.remove(i);
 
 		        //System.out.println("A web browser has requested the following address: http://"+toProcess.path);
