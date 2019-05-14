@@ -89,7 +89,7 @@ public class Main
 			//such as reading from sensors or updating a simulation
 			//this is also a common design for applications with responsive user interfaces
 		while(shouldKeepRunning)
-		{
+		{			
 			//check the time since the last update of the ip
 			//potentially update the otidae redirection
 			
@@ -105,6 +105,8 @@ public class Main
 			
 			for (int i = 0; i < requestToProcess.size(); i++) 
 			{
+				if(i==0)
+					System.out.println("NumRequests per loop:"+requestToProcess.size()+" Num active threads:"+Thread.activeCount()+" FreeMemory:"+Runtime.getRuntime().freeMemory());
 		        WebRequest toProcess = requestToProcess.remove(i);
 
 		        //System.out.println("A web browser has requested the following address: http://"+toProcess.path);
@@ -173,6 +175,7 @@ public class Main
 				//if a graphical user interface were added to this application 
 				//it would appear to be responding instantaneously
 			Thread.sleep(10);
+			System.gc();
 		}
 
 		//Cleanly shuts down the application

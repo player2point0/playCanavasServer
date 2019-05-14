@@ -1,8 +1,12 @@
 var canvas;
 var app;
 const url = "http://localhost:8080/";
-const loopDelay = 1000;
+const loopDelay = 0;
 var entities = [];
+
+var lastTime = 0;
+var total = 0;
+var count = 0;
 
 
 boilerPlate();
@@ -11,7 +15,16 @@ loop();
 
 async function getServerData(endpoint)
 {
+    var startTime = Date.now();
+
     let response = await fetch(url+endpoint);
+
+    var endTime = Date.now();
+    total += endTime - startTime;
+    count++;
+
+    console.log(total / count);
+
     let data = await response.json();
 
     return data;
@@ -82,6 +95,8 @@ async function loop()
             }
         }
     }
+
+    console.log(app.scene);
 
     setTimeout(loop, loopDelay);
 }

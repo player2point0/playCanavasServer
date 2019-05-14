@@ -13,8 +13,7 @@ public class PlayCanvasView extends DynamicWebPage {
 		super(db, fs);
 		// TODO Auto-generated constructor stub
 	}
-
-
+    
     public boolean process(WebRequest toProcess)
     {
         if(toProcess.path.equalsIgnoreCase("playCanvas"))
@@ -74,7 +73,7 @@ public class PlayCanvasView extends DynamicWebPage {
                     
             responseData.put("time", System.currentTimeMillis()); 
             
-            toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_HTML, responseData.toString() );
+            toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );
             return true;
         }
         
@@ -111,11 +110,54 @@ public class PlayCanvasView extends DynamicWebPage {
                     
             responseData.put("time", System.currentTimeMillis()); 
             
-            toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_HTML, responseData.toString() );
+            toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );
             return true;
         }
 
         return false;
     }
+    
+    public JSONArray randomCube()
+    {
+    	double[] points = new double[] {
+    			// Front face
+			  -1.0 * Math.random(), -1.0 * Math.random(),  1.0 * Math.random(),
+			   1.0 * Math.random(), -1.0 * Math.random(),  1.0 * Math.random(),
+			   1.0 * Math.random(),  1.0 * Math.random(),  1.0 * Math.random(),
+			  -1.0 * Math.random(),  1.0 * Math.random(),  1.0 * Math.random(),
+			  
+			  // Back face
+			  -1.0 * Math.random(), -1.0 * Math.random(), -1.0 * Math.random(),
+			  -1.0 * Math.random(),  1.0 * Math.random(), -1.0 * Math.random(),
+			   1.0 * Math.random(),  1.0 * Math.random(), -1.0 * Math.random(),
+			   1.0, -1.0, -1.0,
+			  
+			  // Top face
+			  -1.0 * Math.random(),  1.0 * Math.random(), -1.0 * Math.random(),
+			  -1.0 * Math.random(),  1.0 * Math.random(),  1.0 * Math.random(),
+			   1.0 * Math.random(),  1.0 * Math.random(),  1.0 * Math.random(),
+			   1.0 * Math.random(),  1.0 * Math.random(), -1.0 * Math.random(),
+			  
+			  // Bottom face
+			  -1.0 * Math.random(), -1.0 * Math.random(), -1.0 * Math.random(),
+			   1.0 * Math.random(), -1.0 * Math.random(), -1.0 * Math.random(),
+			   1.0 * Math.random(), -1.0 * Math.random(),  1.0 * Math.random(),
+			  -1.0 * Math.random(), -1.0 * Math.random(),  1.0 * Math.random(),
+			  
+			  // Right face
+			   1.0 * Math.random(), -1.0 * Math.random(), -1.0 * Math.random(),
+			   1.0 * Math.random(),  1.0 * Math.random(), -1.0 * Math.random(),
+			   1.0 * Math.random(),  1.0 * Math.random(),  1.0 * Math.random(),
+			   1.0 * Math.random(), -1.0 * Math.random(),  1.0 * Math.random(),
+			  
+			  // Left face
+			  -1.0 * Math.random(), -1.0 * Math.random(), -1.0 * Math.random(),
+			  -1.0 * Math.random(), -1.0 * Math.random(),  1.0 * Math.random(),
+			  -1.0 * Math.random(),  1.0 * Math.random(),  1.0 * Math.random(),
+			  -1.0 * Math.random(),  1.0 * Math.random(), -1.0 * Math.random() };
+    	
+    	return new JSONArray(points);
+    }
+    
 
 }

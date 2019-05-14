@@ -79,7 +79,6 @@ class JavaEntity
             model.meshInstances.push(meshInstance);
             this.entity.model.model = model;//the entity that the script is attatched to
 
-
             this.app.scene.addModel(this.entity.model.model);
         };
 
@@ -90,6 +89,8 @@ class JavaEntity
         
         this.Entity.addComponent('script');
         this.Entity.script.create(VertexInitialize);         
+
+       
     }
 
 
