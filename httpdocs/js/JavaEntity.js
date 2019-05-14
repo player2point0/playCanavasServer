@@ -28,9 +28,10 @@ class JavaEntity
     
                 currentClass.node = new pc.GraphNode();
                 currentClass.material = new pc.StandardMaterial();
+                currentClass.vertexPos = entityData.vertexData.position;
                 //this.normals = pc.calculateNormals(this.positions, this.indices);
     
-                currentClass.mesh = pc.createMesh(this.app.graphicsDevice, entityData.vertexData.position, {
+                currentClass.mesh = pc.createMesh(this.app.graphicsDevice, currentClass.vertexPos, {
                     normals: entityData.vertexData.normals,
                     uvs: entityData.vertexData.uvs,
                     indices: entityData.vertexData.indices
@@ -95,7 +96,9 @@ class JavaEntity
         this.mesh.indexBuffer[0].destroy();
         this.mesh.vertexBuffer.destroy();
 
-        this.mesh = pc.createMesh(this.app.graphicsDevice, vertexData.position, {
+        this.vertexPos = vertexData.position;
+
+        this.mesh = pc.createMesh(this.app.graphicsDevice, this.vertexPos, {
             normals: vertexData.normals,
             uvs: vertexData.uvs,
             indices: vertexData.indices
@@ -105,6 +108,29 @@ class JavaEntity
  
         //console.log(this.Entity.model.model.meshInstances[0].mesh);
         //console.log(this.app.graphicsDevice.buffers);
+    }
+
+    morphMesh(finalVertetxMesh, steps)
+    {
+        var tempVertex = this.vertexPos;
+        var morphStep = [];//disance to add each time
+
+        //calculate the difference
+        for(var j = 0;j<tempVertex.length;j++)
+        {
+            var dis = finalVertetxMesh.position[j] - tempVertex[j];
+            morphStep.push(dis / steps);
+        }
+
+        for(var i = 0;i<steps;i++)
+        {
+            //move the vertex slightly towards the new pos
+            for(var k = 0;k<tempVertex.length;k++)
+            {
+                
+            }   
+        
+        }
     }
 
 }

@@ -8,8 +8,6 @@ import web.WebRequest;
 import web.WebResponse;
 
 public class PlayCanvasView extends DynamicWebPage {
-
-	double[] previousPos;
 	
     public PlayCanvasView(DatabaseInterface db, FileStoreInterface fs) {
 		super(db, fs);
@@ -74,9 +72,7 @@ public class PlayCanvasView extends DynamicWebPage {
             responseData.put("entities", entities);
                     
             responseData.put("time", System.currentTimeMillis()); 
-            
-            previousPos = positionsArr;
-            
+                        
             toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );
             return true;
         }
@@ -89,10 +85,10 @@ public class PlayCanvasView extends DynamicWebPage {
             JSONObject entity1 = new JSONObject();
             JSONObject vertexData = new JSONObject();
             
-            double[] positionsArr = new double[] {previousPos[0] + 0.001, previousPos[1] + 0.001, 0,
-            		previousPos[3] - 0.001, previousPos[4] + 0.001, 0,
-            		previousPos[6] - 0.001, previousPos[7] - 0.001, 0,
-            		previousPos[9] + 0.001, previousPos[10] - 0.001, 0 };
+            double[] positionsArr = new double[] {1 * Math.random(), 1 * Math.random(), 0,
+            		-1 * Math.random(), 1 * Math.random(), 0,
+            		-1 * Math.random(), -1 * Math.random(), 0,
+            		1 * Math.random(), -1 * Math.random(), 0 };
             JSONArray positions = new JSONArray(positionsArr);     
             double[] normalsArr = new double[] {0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1};
             JSONArray normals = new JSONArray(normalsArr);
@@ -113,9 +109,7 @@ public class PlayCanvasView extends DynamicWebPage {
             responseData.put("entities", entities);
                     
             responseData.put("time", System.currentTimeMillis()); 
-            
-            previousPos = positionsArr;
-            
+                        
             toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );
             return true;
         }

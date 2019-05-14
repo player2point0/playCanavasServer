@@ -71,13 +71,14 @@ async function serverWork()
 
 async function loop()
 {
+    /*
     var endTime = Date.now(); 
     total += endTime - lastTime;
     count++;
     console.log(total / count);
 
     lastTime = endTime;
-
+    */
     var loopData = await getServerData("playCanvasUpdate");
     var loopEntities = loopData.entities;
 
