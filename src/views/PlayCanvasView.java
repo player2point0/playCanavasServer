@@ -1,6 +1,19 @@
 package views;
 
 import org.json.JSONObject;
+
+import animation.Animate;
+import mathematics.GeneralMatrixFloat;
+import mathematics.GeneralMatrixString;
+import procedural.human.HumanBody;
+import procedural.human.HumanVolume;
+import procedural.human.resources.Bones;
+import procedural.human.resources.Sknb;
+import procedural.human.resources.Sknw;
+import procedural.primitives.Skeleton;
+import procedural.primitives.Skin;
+import procedural.primitives.SkinnedVolume;
+
 import org.json.JSONArray;
 import storage.DatabaseInterface;
 import storage.FileStoreInterface;
@@ -35,6 +48,53 @@ public class PlayCanvasView extends DynamicWebPage {
 
         else if(toProcess.path.equalsIgnoreCase("playCanvasStart"))
         {
+        	/*
+			GeneralMatrixString morphnames = new GeneralMatrixString(1);
+			GeneralMatrixFloat morphmagnitudes = new GeneralMatrixFloat(1);
+			
+			//morphnames.push_back("NeutralMaleChild");
+			morphnames.push_back("NeutralFemaleYoung");
+			morphmagnitudes.push_back(1.0f);
+			
+			Skeleton skel = new Skeleton();
+			Skin skin = new Skin();
+			SkinnedVolume svol = new SkinnedVolume();
+			
+			skel.boneParents.setDimensions(1, Bones.names.length);
+			skel.boneParents.set(Bones.bprnts);
+			skel.boneJoints.setDimensions(2,Bones.names.length);
+			skel.boneJoints.set(Bones.bones);
+			HumanBody.createMorphedBody(morphnames,morphmagnitudes, skin.bpos, 
+					skel.vpos,skel.bmats,skel.bonelengths,skel.localbindbmats);
+
+			skeletons.push_back(skel);
+			skins.push_back(skin);
+			volumes.push_back(svol);
+			
+			selectedSkel = skel;
+			
+			skel.lpos.setDimensions(3,1+(Bones.bones.length/2));
+			
+			trimesh.pos.setDimensions(3, skin.bpos.height);
+
+			skin.sb = Sknb.get();
+			skin.sw = Sknw.get();
+			HumanVolume.bonemapping(skin.bpos, skel.vpos, skel.boneJoints, skin.sb, skin.sw, svol.pbone, svol.pbextent);
+			
+			skel.tvpos.setDimensions(skel.vpos.width,skel.vpos.height);
+			skel.tbmats.setDimensions(skel.bmats.width,skel.bmats.height);
+
+			Animate.transformWithParams(skel.boneJoints.value, skel.boneParents.value,
+					skel.bonelengths, skel.localbindbmats,
+					skel.tvpos, skel.tbmats, skel.lpos);
+
+	    	Animate.updateSkinUsingSkeleton(skel.tvpos, skel.tbmats, skel.vpos, skel.bmats, skin.bpos, Bones.bones, skin.sb, skin.sw, trimesh.pos);
+			*/
+        	
+        	
+        	
+        	
+        	
             JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
             
