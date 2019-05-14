@@ -11,20 +11,19 @@ var count = 0;
 
 boilerPlate();
 serverWork();
-loop();
+setTimeout(loop, loopDelay);
 
 async function getServerData(endpoint)
 {
     var startTime = Date.now();
 
     let response = await fetch(url+endpoint);
-
+    
     var endTime = Date.now();
     total += endTime - startTime;
     count++;
-
     console.log(total / count);
-
+    
     let data = await response.json();
 
     return data;
@@ -90,13 +89,11 @@ async function loop()
         {
             if(loopEntities[i].name == entities[j].Entity.name)
             {
-                entities[j].setModel(loopEntities[i].vertexData);         
+                var newVertexData = loopEntities[i].vertexData;
+                entities[j].changeMesh(newVertexData);
                 break;
             }
         }
     }
-
-    console.log(app.scene);
-
     setTimeout(loop, loopDelay);
 }
