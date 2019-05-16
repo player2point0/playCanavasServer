@@ -66,33 +66,27 @@ class JavaEntity
         }
 
         if(entityData.texture)
-        {              
-            /*  
-            if(entityData.texture)
-            {
-                var m = this.Entity.model.model.meshInstances[0].material;
-                console.log(m);
-                m.diffuseMap = getTexture();
-                m.update();
-    
-                function getTexture () {
-                    var texture = new pc.gfx.Texture(app.graphicsDevice);
-                    
-                    var img = new Image();
-                    img.onload = function () {
-                        texture.minFilter = pc.gfx.FILTER_LINEAR;
-                        texture.magFilter = pc.gfx.FILTER_LINEAR;
-                        texture.addressU = pc.gfx.ADDRESS_CLAMP_TO_EDGE;
-                        texture.addressV = pc.gfx.ADDRESS_CLAMP_TO_EDGE;
-                        texture.setSource(img);
-                    };
-                    img.src = entityData.texture;
-                    return texture;
-                }
+        {   
+            var m = this.Entity.model.model.meshInstances[0].material;
+            var texture = getTexture();
+            m.diffuseMap = texture;
+            m.update();
+
+            function getTexture () {
+                var texture = new pc.gfx.Texture(app.graphicsDevice);
                 
+                var img = new Image();
+                img.onload = function () {
+                    texture.minFilter = pc.gfx.FILTER_LINEAR;
+                    texture.magFilter = pc.gfx.FILTER_LINEAR;
+                    texture.addressU = pc.gfx.ADDRESS_CLAMP_TO_EDGE;
+                    texture.addressV = pc.gfx.ADDRESS_CLAMP_TO_EDGE;
+                    texture.setSource(img);
+                };
+                img.src = entityData.texture;
+                return texture;
             }
-            */
-        }
+        }        
 
         // Add to hierarchy
         this.app.root.addChild(this.Entity);
