@@ -1,1 +1,1 @@
-#play canvas streaming server for AI chatbot
+play canvas streaming server for AI chatbot

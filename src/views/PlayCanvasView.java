@@ -119,7 +119,7 @@ public class PlayCanvasView extends DynamicWebPage {
             vertexData.put("indices", indicies);
             
             entity1.put("model", "asset");
-            entity1.put("name", "box1");
+            entity1.put("name", "box10");
             entity1.put("x", 0);
             entity1.put("y", 0);
             entity1.put("z", 0);
@@ -136,7 +136,7 @@ public class PlayCanvasView extends DynamicWebPage {
             toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );
             return true;
         }
-        
+        /*
         else if(toProcess.path.equalsIgnoreCase("playCanvasUpdate"))
         {  	
         	JSONObject responseData = new JSONObject();
@@ -173,7 +173,7 @@ public class PlayCanvasView extends DynamicWebPage {
             toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );
             return true;
         }
-
+         */
         return false;
     }
     
