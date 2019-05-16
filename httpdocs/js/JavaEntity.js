@@ -18,41 +18,22 @@ class JavaEntity
 
         if(entityData.vertexData)
         {
-            var currentClass = this;
+            this.node = new pc.GraphNode();
+            this.material = new pc.StandardMaterial();
+            this.vertexPos = entityData.vertexData.position;
 
-            var VertexInitialize = pc.createScript('VertexInitialize');
-
-            VertexInitialize.prototype.initialize = function() {
-    
-                this.app.scene.removeModel(this.entity.model.model);
-    
-                currentClass.node = new pc.GraphNode();
-                currentClass.material = new pc.StandardMaterial();
-                currentClass.vertexPos = entityData.vertexData.position;
-    
-                currentClass.mesh = pc.createMesh(this.app.graphicsDevice, currentClass.vertexPos, {
-                    normals: pc.calculateNormals(currentClass.vertexPos, entityData.vertexData.indices),
-                    uvs: entityData.vertexData.uvs,
-                    indices: entityData.vertexData.indices
-                });
-                
-                var meshInstance = new pc.MeshInstance(currentClass.node, currentClass.mesh, currentClass.material);
-                
-                var model = new pc.Model();
-                model.graph = currentClass.node;
-                model.meshInstances.push(meshInstance);
-                this.entity.model.model = model;//the entity that the script is attatched to
-    
-                this.app.scene.addModel(this.entity.model.model);
-            };
-    
-    
-            VertexInitialize.prototype.swap = function(old) {
-                this.entity.removeComponent('script');
-            }
+            this.mesh = pc.createMesh(this.app.graphicsDevice, this.vertexPos, {
+                normals: pc.calculateNormals(this.vertexPos, entityData.vertexData.indices),
+                uvs: entityData.vertexData.uvs,
+                indices: entityData.vertexData.indices
+            });
             
-            this.Entity.addComponent('script');
-            this.Entity.script.create(VertexInitialize);         
+            var meshInstance = new pc.MeshInstance(this.node, this.mesh, this.material);
+            
+            var model = new pc.Model();
+            model.graph = this.node;
+            model.meshInstances.push(meshInstance);
+            this.Entity.model.model = model;
         }
 
         if(entityData.name)
@@ -82,6 +63,35 @@ class JavaEntity
             
             this.Entity.addComponent('script');
             this.Entity.script.create(tempScript);            
+        }
+
+        if(entityData.texture)
+        {              
+            /*  
+            if(entityData.texture)
+            {
+                var m = this.Entity.model.model.meshInstances[0].material;
+                console.log(m);
+                m.diffuseMap = getTexture();
+                m.update();
+    
+                function getTexture () {
+                    var texture = new pc.gfx.Texture(app.graphicsDevice);
+                    
+                    var img = new Image();
+                    img.onload = function () {
+                        texture.minFilter = pc.gfx.FILTER_LINEAR;
+                        texture.magFilter = pc.gfx.FILTER_LINEAR;
+                        texture.addressU = pc.gfx.ADDRESS_CLAMP_TO_EDGE;
+                        texture.addressV = pc.gfx.ADDRESS_CLAMP_TO_EDGE;
+                        texture.setSource(img);
+                    };
+                    img.src = entityData.texture;
+                    return texture;
+                }
+                
+            }
+            */
         }
 
         // Add to hierarchy
