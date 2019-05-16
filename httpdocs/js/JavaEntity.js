@@ -29,10 +29,9 @@ class JavaEntity
                 currentClass.node = new pc.GraphNode();
                 currentClass.material = new pc.StandardMaterial();
                 currentClass.vertexPos = entityData.vertexData.position;
-                //this.normals = pc.calculateNormals(this.positions, this.indices);
     
                 currentClass.mesh = pc.createMesh(this.app.graphicsDevice, currentClass.vertexPos, {
-                    normals: entityData.vertexData.normals,
+                    normals: pc.calculateNormals(currentClass.vertexPos, entityData.vertexData.indices),
                     uvs: entityData.vertexData.uvs,
                     indices: entityData.vertexData.indices
                 });
@@ -98,7 +97,7 @@ class JavaEntity
         this.vertexPos = vertexData.position;
 
         this.mesh = pc.createMesh(this.app.graphicsDevice, this.vertexPos, {
-            normals: vertexData.normals,
+            normals: pc.calculateNormals(this.vertexPos, vertexData.indices),
             uvs: vertexData.uvs,
             indices: vertexData.indices
         });

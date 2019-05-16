@@ -48,7 +48,7 @@ function boilerPlate()
 
     // Set up initial positions and orientations
     camera.setPosition(0, 0, 3);
-    light.setEulerAngles(0, 0, 0);
+    light.setEulerAngles(45, 0, 0);
 
     // Resize the canvas when the window is resized
     window.addEventListener('resize', function () {
