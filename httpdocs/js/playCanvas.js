@@ -1,7 +1,7 @@
 var canvas;
 var app;
 const url = "http://localhost:8080/";
-const loopDelay = 0;//takes about 15 for server response
+const loopDelay = 100;//takes about 15 for server response
 var entities = [];
 
 var lastTime = Date.now();
@@ -18,7 +18,6 @@ async function getServerData(endpoint)
     
     let data = await response.json();
 
-    console.log(data);
     return data;
 }
 
@@ -66,7 +65,11 @@ async function serverWork()
     {
         var entity = serverEntities[i];
         var newEntity = new JavaEntity(entity, app);
-        entities.push(newEntity);
+        
+        if(entity.realtimeModel)
+        {
+            entities.push(newEntity);
+        }
     }
 }
 
@@ -91,6 +94,9 @@ async function loop()
             if(loopEntities[i].name == entities[j].Entity.name)
             {
                 var newVertexData = loopEntities[i].vertexData;
+
+                console.log(newVertexData);
+
                 entities[j].changeMesh(newVertexData);
                 break;
             }
