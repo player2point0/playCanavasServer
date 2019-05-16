@@ -78,7 +78,7 @@ class JavaEntity
             
             var tempScript = pc.createScript(scriptName);
             tempScript.prototype.update = function (dt) {
-                eval(entity.script);
+                eval(entityData.script);
             };
             
             this.Entity.addComponent('script');
@@ -88,7 +88,6 @@ class JavaEntity
         // Add to hierarchy
         this.app.root.addChild(this.Entity);
     }
-
 
     changeMesh(vertexData)
     {
