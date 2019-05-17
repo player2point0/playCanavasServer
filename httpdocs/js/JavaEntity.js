@@ -121,6 +121,7 @@ class JavaEntity
         //console.log(this.app.graphicsDevice.buffers);
     }
 
+    //untested
     morphMesh(finalVertetxMesh, steps)
     {
         var tempVertex = this.vertexPos;
@@ -140,7 +141,14 @@ class JavaEntity
             {
                 tempVertex[k] += morphStep[k];
             }   
-            changeMesh()
+
+            tempVertexData = {
+                position: tempVertex,
+                uvs: finalVertetxMesh.uvs,
+                undices: finalVertetxMesh.indices
+            };
+
+            changeMesh(tempVertexData);
         }
     }
 
