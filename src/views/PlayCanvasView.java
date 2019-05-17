@@ -38,7 +38,7 @@ public class PlayCanvasView extends DynamicWebPage {
     public PlayCanvasView(DatabaseInterface db, FileStoreInterface fs) {
 		super(db, fs);
 		// TODO Auto-generated constructor stub
-	}
+	} 
     
     public boolean process(WebRequest toProcess)
     {
@@ -60,7 +60,7 @@ public class PlayCanvasView extends DynamicWebPage {
         }
 
         else if(toProcess.path.equalsIgnoreCase("playCanvasStart"))
-        {
+        { 	
         	GeneralMatrixObject skeletons = new GeneralMatrixObject(1);
         	GeneralMatrixObject skins = new GeneralMatrixObject(1);
         	GeneralMatrixObject volumes = new GeneralMatrixObject(1);
