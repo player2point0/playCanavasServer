@@ -22,6 +22,8 @@ class JavaEntity
             this.material = new pc.StandardMaterial();
             this.vertexPos = entityData.vertexData.position;
 
+            console.log(entityData.vertexData.uvs);
+
             this.mesh = pc.createMesh(this.app.graphicsDevice, this.vertexPos, {
                 normals: pc.calculateNormals(this.vertexPos, entityData.vertexData.indices),
                 uvs: entityData.vertexData.uvs,
@@ -67,25 +69,32 @@ class JavaEntity
 
         if(entityData.texture)
         {   
-            var m = this.Entity.model.model.meshInstances[0].material;
-            var texture = getTexture();
-            m.diffuseMap = texture;
-            m.update();
+            /*
+            var cube = new pc.Entity();
+            cube.addComponent('model', { type: 'box' });
+            app.root.addChild(cube);
 
-            function getTexture () {
-                var texture = new pc.gfx.Texture(app.graphicsDevice);
-                
-                var img = new Image();
-                img.onload = function () {
-                    texture.minFilter = pc.gfx.FILTER_LINEAR;
-                    texture.magFilter = pc.gfx.FILTER_LINEAR;
-                    texture.addressU = pc.gfx.ADDRESS_CLAMP_TO_EDGE;
-                    texture.addressV = pc.gfx.ADDRESS_CLAMP_TO_EDGE;
-                    texture.setSource(img);
-                };
-                img.src = entityData.texture;
-                return texture;
-            }
+            var m = cube.model.model.meshInstances[0].material;
+            m.diffuseMap = getTexture();
+            m.update();
+            */
+            let tex = new pc.Texture( this.app.graphicsDevice);
+
+            tex.minFilter = pc.FILTER_LINEAR;
+            tex.magFilter = pc.FILTER_LINEAR;
+            tex.addressU = pc.ADDRESS_CLAMP_TO_EDGE;
+            tex.addressV = pc.ADDRESS_CLAMP_TO_EDGE;
+
+            let img = document.createElement( 'img' );
+            img.src = entityData.texture;
+            img.crossOrigin = 'anonymous';
+            img.onload = ( e ) => {
+                tex.setSource( img );
+            };
+
+            var m = this.Entity.model.model.meshInstances[0].material;
+            m.diffuseMap = tex;
+            m.update();     
         }        
 
         // Add to hierarchy
