@@ -138,9 +138,9 @@ class JavaEntity
             //move the vertex slightly towards the new pos
             for(var k = 0;k<tempVertex.length;k++)
             {
-                
+                tempVertex[k] += morphStep[k];
             }   
-        
+            changeMesh()
         }
     }
 
