@@ -95,8 +95,6 @@ async function loop()
             {
                 var newVertexData = loopEntities[i].vertexData;
 
-                console.log(newVertexData);
-
                 entities[j].changeMesh(newVertexData);
                 break;
             }

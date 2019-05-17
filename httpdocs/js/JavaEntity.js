@@ -22,8 +22,6 @@ class JavaEntity
             this.material = new pc.StandardMaterial();
             this.vertexPos = entityData.vertexData.position;
 
-            console.log(entityData.vertexData.uvs);
-
             this.mesh = pc.createMesh(this.app.graphicsDevice, this.vertexPos, {
                 normals: pc.calculateNormals(this.vertexPos, entityData.vertexData.indices),
                 uvs: entityData.vertexData.uvs,
