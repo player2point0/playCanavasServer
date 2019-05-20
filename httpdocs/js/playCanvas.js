@@ -47,7 +47,7 @@ function boilerPlate()
     app.root.addChild(light);
 
     // Set up initial positions and orientations
-    camera.setPosition(0, 0, 3);
+    camera.setPosition(0, 0, 30);
     light.setEulerAngles(45, 0, 0);
 
     // Resize the canvas when the window is resized

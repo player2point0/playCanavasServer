@@ -8,6 +8,9 @@ class JavaEntity
         this.x = 0;
         this.y = 0;
         this.z = 0;
+        this.xRotate = 0;
+        this.yRotate = 0;
+        this.zRotate = 0;
 
         if(entityData.model)
         {
@@ -47,6 +50,12 @@ class JavaEntity
 
         this.Entity.setPosition(this.x, this.y, this.z);
 
+        if(entityData.xRotate) this.xRotate = entityData.xRotate;
+        if(entityData.yRotate) this.yRotate = entityData.yRotate;
+        if(entityData.zRotate) this.zRotate = entityData.zRotate;
+        
+        this.Entity.rotate(this.xRotate, this.yRotate, this.zRotate);
+
         if(entityData.script)
         {
             var scriptName = "default"; 
@@ -61,6 +70,13 @@ class JavaEntity
                 eval(entityData.script);
             };
             
+            if(entityData.attribute)
+            {
+                tempScript.attributes.add(entityData.attribute, {
+                    type: 'string'
+                });
+            }
+
             this.Entity.addComponent('script');
             this.Entity.script.create(tempScript);            
         }
