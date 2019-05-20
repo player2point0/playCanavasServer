@@ -112,13 +112,16 @@ class JavaEntity
 
     changeTexture(texture)
     {
-        this.img.src = texture;
-        this.img.onload = ( e ) => {
-            this.texture.setSource( this.img );
-        };
-
-        this.Entity.model.model.meshInstances[0].material.diffuseMap = this.texture;
-        this.Entity.model.model.meshInstances[0].material.update(); 
+        if(texture)
+        {
+            this.img.src = texture;
+            this.img.onload = ( e ) => {
+                this.texture.setSource( this.img );
+            };
+    
+            this.Entity.model.model.meshInstances[0].material.diffuseMap = this.texture;
+            this.Entity.model.model.meshInstances[0].material.update();             
+        }
     }
 
     //untested
