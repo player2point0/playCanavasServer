@@ -1,7 +1,7 @@
 var canvas;
 var app;
 const url = "http://localhost:8080/";
-const loopDelay = 100;//takes about 15 for server response
+const loopDelay = 10;//takes about 15 for server response
 var entities = [];
 
 var lastTime = Date.now();
@@ -94,8 +94,11 @@ async function loop()
             if(loopEntities[i].name == entities[j].Entity.name)
             {
                 var newVertexData = loopEntities[i].vertexData;
+                var newTexture = loopEntities[i].texture;
 
                 entities[j].changeMesh(newVertexData);
+                entities[j].changeTexture(newTexture);
+                
                 break;
             }
         }

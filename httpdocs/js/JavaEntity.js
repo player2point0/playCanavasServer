@@ -67,32 +67,23 @@ class JavaEntity
 
         if(entityData.texture)
         {   
-            /*
-            var cube = new pc.Entity();
-            cube.addComponent('model', { type: 'box' });
-            app.root.addChild(cube);
+            this.texture = new pc.Texture( this.app.graphicsDevice);
 
-            var m = cube.model.model.meshInstances[0].material;
-            m.diffuseMap = getTexture();
-            m.update();
-            */
-            let tex = new pc.Texture( this.app.graphicsDevice);
+            this.texture.minFilter = pc.FILTER_LINEAR;
+            this.texture.magFilter = pc.FILTER_LINEAR;
+            this.texture.addressU = pc.ADDRESS_CLAMP_TO_EDGE;
+            this.texture.addressV = pc.ADDRESS_CLAMP_TO_EDGE;
 
-            tex.minFilter = pc.FILTER_LINEAR;
-            tex.magFilter = pc.FILTER_LINEAR;
-            tex.addressU = pc.ADDRESS_CLAMP_TO_EDGE;
-            tex.addressV = pc.ADDRESS_CLAMP_TO_EDGE;
-
-            let img = document.createElement( 'img' );
-            img.src = entityData.texture;
-            img.crossOrigin = 'anonymous';
-            img.onload = ( e ) => {
-                tex.setSource( img );
+            this.img = document.createElement( 'img' );
+            this.img.src = entityData.texture;
+            this.img.crossOrigin = 'anonymous';
+            this.img.onload = ( e ) => {
+                this.texture.setSource( this.img );
             };
 
-            var m = this.Entity.model.model.meshInstances[0].material;
-            m.diffuseMap = tex;
-            m.update();     
+
+        this.Entity.model.model.meshInstances[0].material.diffuseMap = this.texture;
+        this.Entity.model.model.meshInstances[0].material.update();   
         }        
 
         // Add to hierarchy
@@ -117,6 +108,17 @@ class JavaEntity
  
         //console.log(this.Entity.model.model.meshInstances[0].mesh);
         //console.log(this.app.graphicsDevice.buffers);
+    }
+
+    changeTexture(texture)
+    {
+        this.img.src = texture;
+        this.img.onload = ( e ) => {
+            this.texture.setSource( this.img );
+        };
+
+        this.Entity.model.model.meshInstances[0].material.diffuseMap = this.texture;
+        this.Entity.model.model.meshInstances[0].material.update(); 
     }
 
     //untested
