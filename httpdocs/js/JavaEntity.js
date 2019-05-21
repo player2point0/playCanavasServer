@@ -91,8 +91,13 @@ class JavaEntity
             };
 
 
-        this.Entity.model.model.meshInstances[0].material.diffuseMap = this.texture;
-        this.Entity.model.model.meshInstances[0].material.update();   
+            this.Entity.model.model.meshInstances[0].material.diffuseMap = this.texture;
+            this.Entity.model.model.meshInstances[0].material.emissiveMap = this.texture;
+            this.Entity.model.model.meshInstances[0].material.opacityMap = this.texture;
+            
+            this.Entity.model.model.meshInstances[0].material.blendType = pc.BLEND_NORMAL;
+            
+            this.Entity.model.model.meshInstances[0].material.update();   
         }        
 
         // Add to hierarchy
@@ -154,6 +159,9 @@ class JavaEntity
             };
     
             this.Entity.model.model.meshInstances[0].material.diffuseMap = this.texture;
+            this.Entity.model.model.meshInstances[0].material.emissiveMap = this.texture;
+            this.Entity.model.model.meshInstances[0].material.opacityMap = this.texture;
+                        
             this.Entity.model.model.meshInstances[0].material.update();             
         }
     }
