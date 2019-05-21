@@ -23,6 +23,7 @@ class JavaEntity
         {
             this.node = new pc.GraphNode();
             this.material = new pc.StandardMaterial();
+
             this.vertexPos = entityData.vertexData.position;
 
             this.mesh = pc.createMesh(this.app.graphicsDevice, this.vertexPos, {
@@ -92,7 +93,6 @@ class JavaEntity
 
 
             this.Entity.model.model.meshInstances[0].material.diffuseMap = this.texture;
-            this.Entity.model.model.meshInstances[0].material.emissiveMap = this.texture;
             this.Entity.model.model.meshInstances[0].material.opacityMap = this.texture;
             
             this.Entity.model.model.meshInstances[0].material.blendType = pc.BLEND_NORMAL;
@@ -159,7 +159,6 @@ class JavaEntity
             };
     
             this.Entity.model.model.meshInstances[0].material.diffuseMap = this.texture;
-            this.Entity.model.model.meshInstances[0].material.emissiveMap = this.texture;
             this.Entity.model.model.meshInstances[0].material.opacityMap = this.texture;
                         
             this.Entity.model.model.meshInstances[0].material.update();             
