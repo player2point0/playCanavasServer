@@ -88,26 +88,6 @@ public class PlayCanvasView extends DynamicWebPage {
             
             //entities.put(0, entity1);
                    
-            double cubeNum = 12;
-            double angleAmt = (2*Math.PI) / cubeNum;
-            double dis = 5;
-            
-            for(int i = 0;i<cubeNum;i++)
-            {
-            	double angle = angleAmt * i;
-            	double x = Math.sin(angle) * dis;
-            	double y = Math.cos(angle) * dis;
-            	
-            	JSONObject entity = new JSONObject();
-            	entity.put("model", "box");
-            	entity.put("name", i);
-            	entity.put("realtimeModel", true);
-            	entity.put("x", x);
-            	entity.put("y", y);
-            	entity.put("zRotate", (-angle * (180/Math.PI)));
-            	
-            	entities.put(i, entity);
-            }  
             
             responseData.put("entities", entities);
                     
@@ -121,32 +101,6 @@ public class PlayCanvasView extends DynamicWebPage {
         {  	
         	JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
-            
-            //double[] meshUvsArr = new double[] {};    
-            //double[] meshPointsArr = new double[] {};
-            //int[] meshIndicesArr = new int[] {};
-            //JSONObject entity1 = makeEntity(meshPointsArr, meshUvsArr, meshIndicesArr, "cube", "box1", 0, 0, 0, true, "");
-            
-            double cubeNum = 12;
-            double angleAmt = (2*Math.PI) / cubeNum;
-            double dis = 5;
-            offset += 0.01;
-            
-            for(int i = 0;i<cubeNum;i++)
-            {
-            	double angle = angleAmt * (i + offset);
-            	double x = Math.sin(angle) * dis;
-            	double y = Math.cos(angle) * dis;
-            	
-            	JSONObject entity = new JSONObject();
-            	entity.put("model", "box");
-            	entity.put("name", i);
-            	entity.put("x", x);
-            	entity.put("y", y);
-            	entity.put("zRotate", (-angle * (180/Math.PI)));
-            	
-            	entities.put(i, entity);
-            }  
             
             responseData.put("entities", entities);
                     
@@ -184,140 +138,6 @@ public class PlayCanvasView extends DynamicWebPage {
          entity.put("texture", texture);
          
          return entity;
-    }
-    
-    
-    public void getMesh()
-    {
-    	GeneralMatrixObject skeletons = new GeneralMatrixObject(1);
-    	GeneralMatrixObject skins = new GeneralMatrixObject(1);
-    	GeneralMatrixObject volumes = new GeneralMatrixObject(1);
-		Mesh trimesh = new Mesh();
-
-		GeneralMatrixString morphnames = new GeneralMatrixString(1);
-		GeneralMatrixFloat morphmagnitudes = new GeneralMatrixFloat(1);
-		
-		morphnames.push_back("NeutralMaleChild");
-		//morphnames.push_back("NeutralFemaleYoung");
-		morphmagnitudes.push_back(1.0f);
-		
-		Skeleton skel = new Skeleton();
-		Skin skin = new Skin();
-		SkinnedVolume svol = new SkinnedVolume();
-		
-		skel.boneParents.setDimensions(1, Bones.names.length);
-		skel.boneParents.set(Bones.bprnts);
-		skel.boneJoints.setDimensions(2,Bones.names.length);
-		//int rightLeg = Bones.BONE_RightLowLegtoRightFoot;
-		//Bones.bones[rightLeg] = -50;
-		skel.boneJoints.set(Bones.bones);
-		HumanBody.createMorphedBody(morphnames,morphmagnitudes, skin.bpos, 
-				skel.vpos,skel.bmats,skel.bonelengths,skel.localbindbmats);
-
-		skeletons.push_back(skel);
-		skins.push_back(skin);
-		volumes.push_back(svol);
-					
-		skel.lpos.setDimensions(3,1+(Bones.bones.length/2));
-		
-		trimesh.pos.setDimensions(3, skin.bpos.height);
-
-		skin.sb = Sknb.get();
-		skin.sw = Sknw.get();
-		HumanVolume.bonemapping(skin.bpos, skel.vpos, skel.boneJoints, skin.sb, skin.sw, svol.pbone, svol.pbextent);
-		
-		skel.tvpos.setDimensions(skel.vpos.width,skel.vpos.height);
-		skel.tbmats.setDimensions(skel.bmats.width,skel.bmats.height);
-
-    	int[] quads = QuadMesh.get();
-		trimesh.quads.setDimensions(4,quads.length/4);
-		trimesh.quads.set(quads);
-		int[] quvs = QuadUvs.get();
-		trimesh.quaduvs.setDimensions(4,quads.length/4);
-		trimesh.quaduvs.set(quvs);
-		float[] uvs = Uvs.get();
-		trimesh.uvs.setDimensions(2, uvs.length/2);
-		trimesh.uvs.set(uvs);
-		trimesh.quadnrms.setDimensions(4, quads.length/4);
-
-		
-		double[] meshPointsArr = new double[trimesh.pos.height * 3];
-    	int[] meshIndicesArr = new int[trimesh.quads.height * 6];
-    	double[] meshUvsArr = new double[trimesh.pos.height * 2];
-    	
-    	Animate.transformWithParams(skel.boneJoints.value, skel.boneParents.value,
-				skel.bonelengths, skel.localbindbmats,
-				skel.tvpos, skel.tbmats, skel.lpos);
-
-    	Animate.updateSkinUsingSkeleton(skel.tvpos, skel.tbmats, skel.vpos, skel.bmats, skin.bpos, Bones.bones, skin.sb, skin.sw, trimesh.pos);
-		
-    	//line 847 renderTris()				
-		int j = 0;	
-		
-		HashMap<Integer[], Integer> indexOfVertAndUV = new HashMap<Integer[], Integer>();
-		GeneralMatrixInt mappingFromNewVertsToOld = new GeneralMatrixInt(1);
-		GeneralMatrixInt mappingFromNewVertsToUVs = new GeneralMatrixInt(1);
-
-		for(int qi=0;qi<trimesh.quads.height;qi++)
-		{	
-			int v0 = trimesh.quads.value[qi*trimesh.quads.width+0];
-			int v1 = trimesh.quads.value[qi*trimesh.quads.width+1];
-			int v2 = trimesh.quads.value[qi*trimesh.quads.width+2];
-			int v3 = trimesh.quads.value[qi*trimesh.quads.width+3];
-			
-			//uv0
-			int uv0 = trimesh.quaduvs.value[qi*trimesh.quads.width+0];
-			float uv0u = trimesh.uvs.value[uv0*trimesh.uvs.width+0];
-			float uv0v = trimesh.uvs.value[uv0*trimesh.uvs.width+1];
-			meshUvsArr[v0*2+0] = uv0u;
-			meshUvsArr[v0*2+1] = 1.0f-uv0v;
-			
-			if(!indexOfVertAndUV.containsKey(new Integer[] {v0, uv0}))
-			{
-				Integer[] arr = new Integer[] {v0,  uv0};
-				indexOfVertAndUV.put(arr, qi);
-				
-				mappingFromNewVertsToOld.push_back(v0);
-				mappingFromNewVertsToUVs.push_back(uv0);	
-			}	
-			
-			
-			int uv1 = trimesh.quaduvs.value[qi*trimesh.quads.width+1];
-			float uv1u = trimesh.uvs.value[uv1*trimesh.uvs.width+0];
-			float uv1v = trimesh.uvs.value[uv1*trimesh.uvs.width+1];
-			meshUvsArr[v1*2+0] = uv1u;
-			meshUvsArr[v1*2+1] = 1.0f-uv1v;
-			
-			int uv2 = trimesh.quaduvs.value[qi*trimesh.quads.width+2];
-			float uv2u = trimesh.uvs.value[uv2*trimesh.uvs.width+0];
-			float uv2v = trimesh.uvs.value[uv2*trimesh.uvs.width+1];
-			meshUvsArr[v2*2+0] = uv2u;
-			meshUvsArr[v2*2+1] = 1.0f-uv2v;
-			
-			int uv3 = trimesh.quaduvs.value[qi*trimesh.quads.width+3];
-			float uv3u = trimesh.uvs.value[uv3*trimesh.uvs.width+0];
-			float uv3v = trimesh.uvs.value[uv3*trimesh.uvs.width+1];
-			meshUvsArr[v3*2+0] = uv3u;
-			meshUvsArr[v3*2+1] = 1.0f-uv3v;
-			
-			meshIndicesArr[j] = v0;
-			meshIndicesArr[j+1] = v1;
-			meshIndicesArr[j+2] = v2;
-			meshIndicesArr[j+3] = v0;
-			meshIndicesArr[j+4] = v2;
-			meshIndicesArr[j+5] = v3;
-		
-			j+=6;			
-		}
-				
-		j = 0;
-
-    	for(int i = 0;i<trimesh.pos.height;i++)
-    	{
-    		meshPointsArr[i*3+0] = trimesh.pos.value[i*3];
-    		meshPointsArr[i*3+1] = trimesh.pos.value[(i*3)+1];
-    		meshPointsArr[i*3+2] = trimesh.pos.value[(i*3)+2];        	
-    	}
     }
     
     public double[] Cube()

@@ -76,6 +76,9 @@ public class Main
 //		ExampleView exampleDynamicPage = new ExampleView(databaseInterface,fileStoreInterface);
 		//An example dynamic page that responds to a form in html
 		PlayCanvasView playCanvasViewPage = new PlayCanvasView(databaseInterface,fileStoreInterface);
+		projectHuman projectHumanPage = new projectHuman(databaseInterface,fileStoreInterface);
+		brainUI brainUIPage = new brainUI(databaseInterface,fileStoreInterface);
+		textureStream textureStreamPage = new textureStream(databaseInterface,fileStoreInterface);
 		
 		//this variable indicates that the program should keep running
 			//by setting this variable to false the program will exit
@@ -127,7 +130,10 @@ public class Main
 //		        {		        	//example page is processed
 //		        }
 		        //else
-		        if(playCanvasViewPage.process(toProcess)) {
+		        boolean page = textureStreamPage.process(toProcess);/*projectHumanPage.process(toProcess);*//*brainUIPage.process(toProcess);*//*playCanvasViewPage.process(toProcess);*/
+	        	
+	        	
+	        	if(page) {
 			    }
 			    else{
 			        String asFilepath = fileStoreInterface.decodeFilePath(toProcess.path);

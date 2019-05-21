@@ -101,16 +101,9 @@ class JavaEntity
 
     updateEntity(entityData)
     {
-        if(entityData.model)
-        {
-            this.Entity.addComponent('model', {
-                type: entityData.model
-            });
-        }
-
         if(entityData.vertexData)
         {
-            changeMesh(entityData.vertexData);
+            this.changeMesh(entityData.vertexData);
         }
 
         if(entityData.x) this.x = entityData.x;
@@ -127,7 +120,7 @@ class JavaEntity
 
         if(entityData.texture)
         {
-            changeTexture(entityData.texture);   
+            this.changeTexture(entityData.texture);   
         }
     }
 

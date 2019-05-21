@@ -1,7 +1,7 @@
 var canvas;
 var app;
 const url = "http://localhost:8080/";
-const loopDelay = 10;//takes about 15 for server response
+const loopDelay = 100;//takes about 15 for server response
 var entities = [];
 
 var lastTime = Date.now();
@@ -42,13 +42,21 @@ function boilerPlate()
     var light = new pc.Entity();
     light.addComponent('light');
 
+
     // Add to hierarchy
     app.root.addChild(camera);
     app.root.addChild(light);
 
-    // Set up initial positions and orientations
-    camera.setPosition(0, 0, 30);
+    camera.setPosition(0, 0, 10);
     light.setEulerAngles(45, 0, 0);
+    // Set up initial positions and orientations
+    /*
+    camera.setPosition(0, -30, 10);
+    camera.setEulerAngles(70, 0, 0);
+
+    light.setPosition(0, -30, 10);
+    light.setEulerAngles(60, 0, 0);
+    */
 
     // Resize the canvas when the window is resized
     window.addEventListener('resize', function () {
