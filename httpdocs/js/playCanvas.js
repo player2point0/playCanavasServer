@@ -47,7 +47,7 @@ function boilerPlate()
     app.root.addChild(camera);
     app.root.addChild(light);
 
-    camera.setPosition(0, 0, 10);
+    camera.setPosition(10, 0, 30);
     light.setEulerAngles(45, 0, 0);
     // Set up initial positions and orientations
     /*

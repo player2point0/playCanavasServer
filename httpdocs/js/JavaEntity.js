@@ -11,6 +11,9 @@ class JavaEntity
         this.xRotate = 0;
         this.yRotate = 0;
         this.zRotate = 0;
+        this.xScale = 1;
+        this.yScale = 1;
+        this.zScale = 1;
 
         if(entityData.model)
         {
@@ -48,14 +51,17 @@ class JavaEntity
         if(entityData.x) this.x = entityData.x;
         if(entityData.y) this.y = entityData.y;
         if(entityData.z) this.z = entityData.z;
-
         this.Entity.setPosition(this.x, this.y, this.z);
 
         if(entityData.xRotate) this.xRotate = entityData.xRotate;
         if(entityData.yRotate) this.yRotate = entityData.yRotate;
         if(entityData.zRotate) this.zRotate = entityData.zRotate;
-        
         this.Entity.setEulerAngles(this.xRotate, this.yRotate, this.zRotate);
+
+        if(entityData.xScale) this.xScale = entityData.xScale;
+        if(entityData.yScale) this.yScale = entityData.yScale;
+        if(entityData.zScale) this.zScale = entityData.zScale;
+        this.Entity.setLocalScale(this.xScale, this.yScale, this.zScale);
 
         if(entityData.script)
         {
@@ -114,14 +120,17 @@ class JavaEntity
         if(entityData.x) this.x = entityData.x;
         if(entityData.y) this.y = entityData.y;
         if(entityData.z) this.z = entityData.z;
-
         this.Entity.setPosition(this.x, this.y, this.z);
 
         if(entityData.xRotate) this.xRotate = entityData.xRotate;
         if(entityData.yRotate) this.yRotate = entityData.yRotate;
         if(entityData.zRotate) this.zRotate = entityData.zRotate;
-        
         this.Entity.setEulerAngles(this.xRotate, this.yRotate, this.zRotate);
+
+        if(entityData.xScale) this.xScale = entityData.xScale;
+        if(entityData.yScale) this.yScale = entityData.yScale;
+        if(entityData.zScale) this.zScale = entityData.zScale;
+        this.Entity.setLocalScale(this.xScale, this.yScale, this.zScale);
 
         if(entityData.texture)
         {

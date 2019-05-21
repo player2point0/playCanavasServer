@@ -79,6 +79,7 @@ public class Main
 		projectHuman projectHumanPage = new projectHuman(databaseInterface,fileStoreInterface);
 		brainUI brainUIPage = new brainUI(databaseInterface,fileStoreInterface);
 		textureStream textureStreamPage = new textureStream(databaseInterface,fileStoreInterface);
+		virtualNI virtualNIPage = new virtualNI(databaseInterface,fileStoreInterface);
 		
 		//this variable indicates that the program should keep running
 			//by setting this variable to false the program will exit
@@ -130,7 +131,7 @@ public class Main
 //		        {		        	//example page is processed
 //		        }
 		        //else
-		        boolean page = textureStreamPage.process(toProcess);/*projectHumanPage.process(toProcess);*//*brainUIPage.process(toProcess);*//*playCanvasViewPage.process(toProcess);*/
+		        boolean page = virtualNIPage.process(toProcess);/*textureStreamPage.process(toProcess);*//*projectHumanPage.process(toProcess);*//*brainUIPage.process(toProcess);*//*playCanvasViewPage.process(toProcess);*/
 	        	
 	        	
 	        	if(page) {
