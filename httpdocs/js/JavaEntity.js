@@ -2,7 +2,7 @@ class JavaEntity
 {
 
     constructor(entityData, app) {
-
+        
         this.app = app;
         this.Entity = new pc.Entity();
         this.x = 0;
@@ -54,7 +54,7 @@ class JavaEntity
         if(entityData.yRotate) this.yRotate = entityData.yRotate;
         if(entityData.zRotate) this.zRotate = entityData.zRotate;
         
-        this.Entity.rotate(this.xRotate, this.yRotate, this.zRotate);
+        this.Entity.setEulerAngles(this.xRotate, this.yRotate, this.zRotate);
 
         if(entityData.script)
         {
@@ -69,13 +69,6 @@ class JavaEntity
             tempScript.prototype.update = function (dt) {
                 eval(entityData.script);
             };
-            
-            if(entityData.attribute)
-            {
-                tempScript.attributes.add(entityData.attribute, {
-                    type: 'string'
-                });
-            }
 
             this.Entity.addComponent('script');
             this.Entity.script.create(tempScript);            
@@ -104,6 +97,38 @@ class JavaEntity
 
         // Add to hierarchy
         this.app.root.addChild(this.Entity);
+    }
+
+    updateEntity(entityData)
+    {
+        if(entityData.model)
+        {
+            this.Entity.addComponent('model', {
+                type: entityData.model
+            });
+        }
+
+        if(entityData.vertexData)
+        {
+            changeMesh(entityData.vertexData);
+        }
+
+        if(entityData.x) this.x = entityData.x;
+        if(entityData.y) this.y = entityData.y;
+        if(entityData.z) this.z = entityData.z;
+
+        this.Entity.setPosition(this.x, this.y, this.z);
+
+        if(entityData.xRotate) this.xRotate = entityData.xRotate;
+        if(entityData.yRotate) this.yRotate = entityData.yRotate;
+        if(entityData.zRotate) this.zRotate = entityData.zRotate;
+        
+        this.Entity.setEulerAngles(this.xRotate, this.yRotate, this.zRotate);
+
+        if(entityData.texture)
+        {
+            changeTexture(entityData.texture);   
+        }
     }
 
     changeMesh(vertexData)

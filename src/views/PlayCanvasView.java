@@ -35,6 +35,8 @@ import web.WebResponse;
 
 public class PlayCanvasView extends DynamicWebPage {
 	
+	private double offset = 0;
+	
     public PlayCanvasView(DatabaseInterface db, FileStoreInterface fs) {
 		super(db, fs);
 		// TODO Auto-generated constructor stub
@@ -85,27 +87,24 @@ public class PlayCanvasView extends DynamicWebPage {
             //entity1.put("script", "this.entity.rotate(0, 10 * dt, 0);");
             
             //entities.put(0, entity1);
-            
-            
+                   
             double cubeNum = 12;
             double angleAmt = (2*Math.PI) / cubeNum;
             double dis = 5;
             
             for(int i = 0;i<cubeNum;i++)
             {
+            	double angle = angleAmt * i;
+            	double x = Math.sin(angle) * dis;
+            	double y = Math.cos(angle) * dis;
+            	
             	JSONObject entity = new JSONObject();
             	entity.put("model", "box");
             	entity.put("name", i);
-            	entity.put("attribute", "offset");
-            	entity.put("scriptName", "cubeController");
-            	entity.put("script", "console.log(this.offset);"
-            			+ "if(!this.offset) this.offset = 0;"
-            			+ "var angle = this.offset + "+ angleAmt * i+";"
-            			+ "var x = Math.sin(angle) * "+dis+";"
-    					+ "var y = Math.cos(angle) * "+dis+";"
-						+ "this.entity.setPosition(x, y, 0);"
-						+ "this.entity.setEulerAngles(0, 0, -angle * (180/Math.PI))"
-            			+ "this.offset += dt;");
+            	entity.put("realtimeModel", true);
+            	entity.put("x", x);
+            	entity.put("y", y);
+            	entity.put("zRotate", (-angle * (180/Math.PI)));
             	
             	entities.put(i, entity);
             }  
@@ -123,12 +122,31 @@ public class PlayCanvasView extends DynamicWebPage {
         	JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
             
-            double[] meshUvsArr = new double[] {};    
-            double[] meshPointsArr = new double[] {};
-            int[] meshIndicesArr = new int[] {};
-            
+            //double[] meshUvsArr = new double[] {};    
+            //double[] meshPointsArr = new double[] {};
+            //int[] meshIndicesArr = new int[] {};
             //JSONObject entity1 = makeEntity(meshPointsArr, meshUvsArr, meshIndicesArr, "cube", "box1", 0, 0, 0, true, "");
             
+            double cubeNum = 12;
+            double angleAmt = (2*Math.PI) / cubeNum;
+            double dis = 5;
+            offset += 0.01;
+            
+            for(int i = 0;i<cubeNum;i++)
+            {
+            	double angle = angleAmt * (i + offset);
+            	double x = Math.sin(angle) * dis;
+            	double y = Math.cos(angle) * dis;
+            	
+            	JSONObject entity = new JSONObject();
+            	entity.put("model", "box");
+            	entity.put("name", i);
+            	entity.put("x", x);
+            	entity.put("y", y);
+            	entity.put("zRotate", (-angle * (180/Math.PI)));
+            	
+            	entities.put(i, entity);
+            }  
             
             responseData.put("entities", entities);
                     

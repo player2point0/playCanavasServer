@@ -64,8 +64,14 @@ async function serverWork()
     for(var i = 0;i<serverEntities.length;i++)
     {
         var entity = serverEntities[i];
-        var newEntity = new JavaEntity(entity, app);
+        var newEntity = new JavaEntity(entity, app); 
         
+        if((entity.name != undefined) && (newEntity.Entity.name == "Untitled")) 
+        {
+            //bug fix for first entity
+            newEntity.Entity.name = entity.name;
+        }
+
         if(entity.realtimeModel)
         {
             entities.push(newEntity);
@@ -93,11 +99,7 @@ async function loop()
         {
             if(loopEntities[i].name == entities[j].Entity.name)
             {
-                var newVertexData = loopEntities[i].vertexData;
-                var newTexture = loopEntities[i].texture;
-
-                entities[j].changeMesh(newVertexData);
-                entities[j].changeTexture(newTexture);
+                entities[j].updateEntity(loopEntities[i]);
                 
                 break;
             }
