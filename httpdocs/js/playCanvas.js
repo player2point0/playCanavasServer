@@ -1,10 +1,5 @@
 var canvas;
 var app;
-var camera;
-var camRotationX = 0;
-var camRotationY = 0;
-var camX = 0;
-var camZ = 30;
 const url = "http://localhost:8080/";
 const loopDelay = 100;//takes about 15 for server response
 var entities = [];
@@ -38,74 +33,17 @@ function boilerPlate()
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     // Create camera entity
-    camera = new pc.Entity();
-    camera.addComponent('camera', {
-        clearColor: new pc.Color(0.1, 0.2, 0.3)
-    });
-    
-    
-    //first person camera 
-    addEventListener("mousemove", function (e) {
-        // If pointer is disabled
-        // If the left mouse button is down update the camera from mouse movement
-        if (pc.Mouse.isPointerLocked() || e.buttons[0]) 
-        {
-            camera.eulerAngles.x = camera.eulerAngles.x - 0.1 * e.movementY;
-            camera.eulerAngles.y = camera.eulerAngles.y - 0.1 * e.movementX;
-
-            camera.setEulerAngles(camera.eulerAngles.x, camera.eulerAngles.y, 0);
-        }
-    });
-    addEventListener("mousedown", function () {
-        canvas.requestPointerLock()
-    });
-    addEventListener("keypress", function(e){
-        
-        var speed = 1;
-        var forward = this.camera.forward;
-        var right = this.camera.right;
-
-        if(e.key == "w")
-        {
-            camX += forward.x * speed;
-            camZ += forward.z * speed;
-        }
-        if(e.key == "s")
-        {
-            camX -= forward.x * speed;
-            camZ -= forward.z * speed;
-        }
-        if(e.key == "a")
-        {
-            camX -= right.x * speed;
-            camZ -= right.z * speed;
-        }
-        if(e.key == "d")
-        {
-            camX += right.x * speed;
-            camZ += right.z * speed;
-        }
-
-        camera.setPosition(camX, camera.position.y, camZ);
-    });
-
-
+    var fpCamera = new FirstPersonCam(0, 0, 30, 0, 0, 0, app);
 
     // Create directional light entity
     var light = new pc.Entity();
     light.addComponent('light');
 
     // Add to hierarchy
-    app.root.addChild(camera);
     app.root.addChild(light);
-
-    camera.setPosition(camX, 0, camZ);
     light.setEulerAngles(45, 0, 0);
     // Set up initial positions and orientations
     /*
-    camera.setPosition(0, -30, 10);
-    camera.setEulerAngles(70, 0, 0);
-
     light.setPosition(0, -30, 10);
     light.setEulerAngles(60, 0, 0);
     */
