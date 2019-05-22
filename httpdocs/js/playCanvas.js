@@ -4,7 +4,7 @@ var camera;
 var camRotationX = 0;
 var camRotationY = 0;
 var camX = 0;
-var camZ = 0;
+var camZ = 30;
 const url = "http://localhost:8080/";
 const loopDelay = 100;//takes about 15 for server response
 var entities = [];
@@ -44,12 +44,7 @@ function boilerPlate()
     });
     
     
-    //first person camera
-    //this.force = new pc.Vec3();
-    //this.camera = null;
-    //this.eulers = new pc.Vec3();
-    
-    // Listen for mouse move events
+    //first person camera 
     addEventListener("mousemove", function (e) {
         // If pointer is disabled
         // If the left mouse button is down update the camera from mouse movement
@@ -61,15 +56,11 @@ function boilerPlate()
             camera.setEulerAngles(camera.eulerAngles.x, camera.eulerAngles.y, 0);
         }
     });
-
     addEventListener("mousedown", function () {
         canvas.requestPointerLock()
     });
-    
     addEventListener("keypress", function(e){
         
-        console.log(camera.eulerAngles);
-
         var speed = 1;
         var forward = this.camera.forward;
         var right = this.camera.right;
@@ -96,9 +87,8 @@ function boilerPlate()
         }
 
         camera.setPosition(camX, camera.position.y, camZ);
-    
-        console.log(camera.eulerAngles);
     });
+
 
 
     // Create directional light entity
@@ -109,7 +99,7 @@ function boilerPlate()
     app.root.addChild(camera);
     app.root.addChild(light);
 
-    camera.setPosition(10, 0, 30);
+    camera.setPosition(camX, 0, camZ);
     light.setEulerAngles(45, 0, 0);
     // Set up initial positions and orientations
     /*
