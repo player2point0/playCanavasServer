@@ -14,16 +14,17 @@ class FirstPersonCam{
             clearColor: new pc.Color(0.1, 0.2, 0.3)
         });
         
-        //first person camera 
-        
+        //first person camera  
         addEventListener("mousemove", e => {
             
             // If pointer is disabled
             // If the left mouse button is down update the camera from mouse movement
             if (pc.Mouse.isPointerLocked() || e.buttons[0]) 
             {
-                this.camera.eulerAngles.x = this.camera.eulerAngles.x - 0.1 * e.movementY;
-                this.camera.eulerAngles.y = this.camera.eulerAngles.y - 0.1 * e.movementX;
+                var speed = 0.1;
+
+                this.camera.eulerAngles.x = this.camera.eulerAngles.x - speed * e.movementY;
+                this.camera.eulerAngles.y = this.camera.eulerAngles.y - speed * e.movementX;
 
                 this.camera.setEulerAngles(this.camera.eulerAngles.x, this.camera.eulerAngles.y, 0);
             }
@@ -31,13 +32,14 @@ class FirstPersonCam{
         
         addEventListener("mousedown",  e => {
             canvas.requestPointerLock()
-        });
+        });   
 
         addEventListener("keypress", e => {
             
             var speed = 1;
             var forward = this.camera.forward;
             var right = this.camera.right;
+            var up = this.camera.up;
 
             if(e.key == "w")
             {
@@ -58,6 +60,14 @@ class FirstPersonCam{
             {
                 this.x += right.x * speed;
                 this.z += right.z * speed;
+            }
+            if(e.key == "q")
+            {
+                this.y += up.y * speed;
+            }
+            if(e.key == "e")
+            {
+                this.y -= up.y * speed;
             }
 
             this.camera.setPosition(this.x, this.y, this.z);

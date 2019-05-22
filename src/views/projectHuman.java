@@ -50,6 +50,7 @@ public class projectHuman extends DynamicWebPage {
         			"<head>"+
             			"<script src=\"https://code.playcanvas.com/playcanvas-latest.js\"></script>\n" + 
             			"<script src=\"./js/JavaEntity.js\"></script>\n" + 
+            			"<script src=\"./js/FirstPersonCam.js\"></script>\n" + 
                         "<link href=\"css/stats.css\" rel=\"stylesheet\" type=\"text/css\">" +
             		"</head>"+
             		"<body>\n" + 
