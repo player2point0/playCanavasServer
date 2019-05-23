@@ -50,6 +50,7 @@ public class PlayCanvasView extends DynamicWebPage {
         			"<head>"+
             			"<script src=\"https://code.playcanvas.com/playcanvas-latest.js\"></script>\n" + 
             			"<script src=\"./js/JavaEntity.js\"></script>\n" + 
+            			"<script src=\"./js/FirstPersonCam.js\"></script>\n" + 
                         "<link href=\"css/stats.css\" rel=\"stylesheet\" type=\"text/css\">" +
             		"</head>"+
             		"<body>\n" + 
@@ -111,65 +112,6 @@ public class PlayCanvasView extends DynamicWebPage {
         }
          
         return false;
-    }
-  
-    public JSONObject makeEntity(double[] positionsArr, double[] uvsArr, int[] indiciesArr, String  model, String name, double x, double y, double z, boolean realTimeModel, String texture)
-    {
-    	 JSONObject entity = new JSONObject();
-         JSONObject vertexData = new JSONObject(); 
-         
-         JSONArray positions = new JSONArray(positionsArr);     
-         JSONArray uvs = new JSONArray(uvsArr);
-         JSONArray indicies = new JSONArray(indiciesArr);
-         
-         vertexData.put("position", positions);
-         vertexData.put("uvs", uvs);
-         vertexData.put("indices", indicies);
-         
-         entity.put("model", model);
-         entity.put("name", name);
-         entity.put("x", x);
-         entity.put("y", y);
-         entity.put("z", z);
-         entity.put("realtimeModel", realTimeModel);
-         entity.put("vertexData", vertexData);
-         entity.put("scriptName", "rotate1");
-         entity.put("script", "this.entity.rotate(0, 10 * dt, 0);");
-         entity.put("texture", texture);
-         
-         return entity;
-    }
-    
-    public double[] Cube()
-    {	
-    	double scale = 0.5;
-    	
-    	double[] points = new double[] {
-    			   -1 * scale, -1 * scale, -1 * scale,
-    			    1 * scale, -1 * scale, -1 * scale,
-    			    1 * scale, 1 * scale, -1 * scale,
-    			    -1 * scale, 1 * scale, -1 * scale,
-    			    -1 * scale, -1 * scale, 1 * scale,
-    			    1 * scale, -1 * scale, 1 * scale,
-    			    1 * scale, 1 * scale, 1 * scale,
-    			    -1 * scale, 1 * scale, 1 * scale
-    	};
-    	
-    	return points;
-    }
-    
-    public int[] cubeIndicies()
-    {
-    	int[] indices = new int[] {
-    		    0, 1, 3, 3, 1, 2,
-    		    1, 5, 2, 2, 5, 6,
-    		    5, 4, 6, 6, 4, 7,
-    		    4, 0, 7, 7, 0, 3,
-    		    3, 2, 7, 7, 2, 6,
-    		    4, 5, 0, 0, 5, 1
-    		};
-    	
-    	return indices;
     }
     
 

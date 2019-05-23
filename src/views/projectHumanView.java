@@ -33,11 +33,11 @@ import storage.FileStoreInterface;
 import web.WebRequest;
 import web.WebResponse;
 
-public class projectHuman extends DynamicWebPage {
+public class projectHumanView extends DynamicWebPage {
 	
 	private double offset = 0;
 	
-    public projectHuman(DatabaseInterface db, FileStoreInterface fs) {
+    public projectHumanView(DatabaseInterface db, FileStoreInterface fs) {
 		super(db, fs);
 		// TODO Auto-generated constructor stub
 	} 
@@ -246,8 +246,8 @@ public class projectHuman extends DynamicWebPage {
          entity.put("z", z);
          entity.put("realtimeModel", realTimeModel);
          entity.put("vertexData", vertexData);
-         entity.put("scriptName", "rotate1");
-         entity.put("script", "this.entity.rotate(0, 10 * dt, 0);");
+         //entity.put("scriptName", "rotate1");
+         //entity.put("script", "this.entity.rotate(0, 10 * dt, 0);");
          entity.put("texture", texture);
          
          return entity;

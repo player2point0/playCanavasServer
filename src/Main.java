@@ -76,10 +76,11 @@ public class Main
 //		ExampleView exampleDynamicPage = new ExampleView(databaseInterface,fileStoreInterface);
 		//An example dynamic page that responds to a form in html
 		PlayCanvasView playCanvasViewPage = new PlayCanvasView(databaseInterface,fileStoreInterface);
-		projectHuman projectHumanPage = new projectHuman(databaseInterface,fileStoreInterface);
+		projectHumanView projectHumanPage = new projectHumanView(databaseInterface,fileStoreInterface);
 		brainUI brainUIPage = new brainUI(databaseInterface,fileStoreInterface);
 		textureStream textureStreamPage = new textureStream(databaseInterface,fileStoreInterface);
 		virtualNI virtualNIPage = new virtualNI(databaseInterface,fileStoreInterface);
+		SketchFabView sketchFabPage = new SketchFabView(databaseInterface,fileStoreInterface);
 		
 		//this variable indicates that the program should keep running
 			//by setting this variable to false the program will exit
@@ -131,7 +132,7 @@ public class Main
 //		        {		        	//example page is processed
 //		        }
 		        //else
-		        boolean page = virtualNIPage.process(toProcess);/*textureStreamPage.process(toProcess);*//*projectHumanPage.process(toProcess);*//*brainUIPage.process(toProcess);*//*playCanvasViewPage.process(toProcess);*/
+		        boolean page = sketchFabPage.process(toProcess);/*virtualNIPage.process(toProcess);*//*textureStreamPage.process(toProcess);*//*projectHumanPage.process(toProcess);*//*brainUIPage.process(toProcess);*//*playCanvasViewPage.process(toProcess);*/
 	        	
 	        	
 	        	if(page) {

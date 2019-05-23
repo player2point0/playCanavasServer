@@ -14,6 +14,7 @@ class JavaEntity
         this.xScale = 1;
         this.yScale = 1;
         this.zScale = 1;
+        this.textureURL = "";
 
         if(entityData.model)
         {
@@ -81,6 +82,13 @@ class JavaEntity
             this.Entity.script.create(tempScript);            
         }
 
+        if(entityData.textureURL)
+        {
+            this.textureURL = entityData.textureURL;
+
+
+        }
+
         if(entityData.texture)
         {   
             this.texture = new pc.Texture( this.app.graphicsDevice);
@@ -97,7 +105,6 @@ class JavaEntity
                 this.texture.setSource( this.img );
             };
 
-
             this.Entity.model.model.meshInstances[0].material.diffuseMap = this.texture;
             this.Entity.model.model.meshInstances[0].material.opacityMap = this.texture;
             
@@ -106,8 +113,33 @@ class JavaEntity
             this.Entity.model.model.meshInstances[0].material.update();   
         }        
 
-        //console.log(this.Entity.model.model.meshInstances[0].material);
-        
+        if(entityData.sketchFabFile)
+        {
+            var current = this;
+
+            app.assets.loadFromUrl('./sketchFab/'+entityData.sketchFabFile+'.gltf', 'json', function (err, asset) {
+            
+                var json = asset.resource;
+                var gltf = JSON.parse(json);
+
+                loadGltf(gltf, app.graphicsDevice, function (model, textures, animationClips) {
+                    // Wrap the model as an asset and add to the asset registry
+                    var asset = new pc.Asset('gltf', 'model', {
+                        url: ''
+                    });
+                    asset.resource = model;
+                    asset.loaded = true;
+                    app.assets.add(asset);
+
+                    current.Entity.model.model = model;
+                }, {
+                    basePath: './sketchFab/'
+                });
+            });
+        }
+
+
+
         // Add to hierarchy
         this.app.root.addChild(this.Entity);
     }
@@ -205,6 +237,29 @@ class JavaEntity
 
             changeMesh(tempVertexData);
         }
+    }
+
+    async getTextureFromURL(url)
+    {
+        var url = "http://169.254.100.32:8080/captureKinectImage";
+    
+        fetch(url).then((response) => {
+          response.arrayBuffer().then((buffer) => {
+            var base64Flag = 'data:image/jpeg;base64,';
+            var imageStr = arrayBufferToBase64(buffer);
+            
+            return base64Flag+imageStr;
+          });
+        });
+        
+        function arrayBufferToBase64(buffer) {
+          var binary = '';
+          var bytes = [].slice.call(new Uint8Array(buffer));
+        
+          bytes.forEach((b) => binary += String.fromCharCode(b));
+        
+          return window.btoa(binary);
+        };
     }
 
 }

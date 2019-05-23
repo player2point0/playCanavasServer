@@ -28,8 +28,8 @@ function boilerPlate()
     app = new pc.Application(canvas, {});
     app.start();
 
-    console.log("skybox:");
-    console.log(app.scene._skyboxCubeMap);
+    //console.log("skybox:");
+    //console.log(app.scene._skyboxCubeMap);
 
     // Fill the available space at full resolution
     app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
