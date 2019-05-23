@@ -28,6 +28,9 @@ function boilerPlate()
     app = new pc.Application(canvas, {});
     app.start();
 
+    console.log("skybox:");
+    console.log(app.scene._skyboxCubeMap);
+
     // Fill the available space at full resolution
     app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
@@ -36,18 +39,33 @@ function boilerPlate()
     var fpCamera = new FirstPersonCam(0, 0, 30, 0, 0, 0, app);
 
     // Create directional light entity
-    var light = new pc.Entity();
-    light.addComponent('light');
+    var mainLight = new pc.Entity();
+    mainLight.addComponent('light');
+    mainLight.setEulerAngles(45, 0, 0);
+    mainLight.setPosition(0, 0, 30);
+    app.root.addChild(mainLight);
+
+    var sideLight = new pc.Entity();
+    sideLight.addComponent('light');
+    sideLight.setEulerAngles(-10, -50, 0);
+    sideLight.setPosition(-25, 10, 30);
+    app.root.addChild(sideLight);
+    
 
     // Add to hierarchy
-    app.root.addChild(light);
-    light.setEulerAngles(45, 0, 0);
     // Set up initial positions and orientations
     /*
     light.setPosition(0, -30, 10);
     light.setEulerAngles(60, 0, 0);
     */
 
+    
+    //pbr
+    app.scene.defaultMaterial.useMetalness = true;
+    
+    app.scene.defaultMaterial.metalness = 0;
+    app.scene.defaultMaterial.shininess = 100;
+    
     // Resize the canvas when the window is resized
     window.addEventListener('resize', function () {
         app.resizeCanvas(canvas.width, canvas.height);
@@ -63,7 +81,7 @@ async function serverWork()
     {
         var entity = serverEntities[i];
         var newEntity = new JavaEntity(entity, app); 
-        
+
         if((entity.name != undefined) && (newEntity.Entity.name == "Untitled")) 
         {
             //bug fix for first entity
@@ -79,6 +97,7 @@ async function serverWork()
 
 async function loop()
 {
+    //console.log(app.stats.frame);
     /*
     var endTime = Date.now(); 
     total += endTime - lastTime;
@@ -106,6 +125,5 @@ async function loop()
 
     //call update directly
     //app.update(dt);
-
     setTimeout(loop, loopDelay);
 }

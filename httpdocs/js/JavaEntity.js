@@ -106,6 +106,8 @@ class JavaEntity
             this.Entity.model.model.meshInstances[0].material.update();   
         }        
 
+        //console.log(this.Entity.model.model.meshInstances[0].material);
+        
         // Add to hierarchy
         this.app.root.addChild(this.Entity);
     }

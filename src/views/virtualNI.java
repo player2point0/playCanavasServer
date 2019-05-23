@@ -68,23 +68,35 @@ public class virtualNI extends DynamicWebPage {
             JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
             int i = 0;
+            double spacing = 3;
             
-            for(int x = 0;x<10;x++)
+    		JSONObject entity = new JSONObject();
+            entity.put("model", "plane");
+        	entity.put("xScale", 100);
+        	entity.put("zScale", 100);
+        	entity.put("x", 25);
+        	entity.put("z", 25);
+        	
+            entities.put(i, entity);       	
+            i++;
+            
+            for(int x = 0;x<20;x++)
             {
-            	for(int y = 0;y<10;y++)
+            	for(int y = 0;y<20;y++)
                 {
+            		double height = Math.random() * 3;
+            		
             		JSONObject entity1 = new JSONObject();
                     entity1.put("model", "box");
-                    entity1.put("x", x * 2);
-                    entity1.put("z", y * 2);
-                    entity1.put("y", -5);
-                    
-                    entity1.put("yScale", Math.random() * 3);
+                    entity1.put("x", x * spacing);
+                    entity1.put("z", y * spacing);
+                    entity1.put("y", height/2);   
+                    entity1.put("yScale", height);
                     
                     entities.put(i, entity1);       	
                     i++;
                 }
-            }
+            }   	
                 
             responseData.put("entities", entities);
                     

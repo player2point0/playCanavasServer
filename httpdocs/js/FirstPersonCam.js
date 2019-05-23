@@ -27,6 +27,8 @@ class FirstPersonCam{
                 this.camera.eulerAngles.y = this.camera.eulerAngles.y - speed * e.movementX;
 
                 this.camera.setEulerAngles(this.camera.eulerAngles.x, this.camera.eulerAngles.y, 0);
+
+                //console.log("rotation "+this.camera.eulerAngles);
             }
         });
         
@@ -71,6 +73,8 @@ class FirstPersonCam{
             }
 
             this.camera.setPosition(this.x, this.y, this.z);
+            
+            //console.log("position "+this.camera.position);
         });
 
         app.root.addChild(this.camera);
