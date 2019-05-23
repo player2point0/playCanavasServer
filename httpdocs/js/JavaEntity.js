@@ -113,31 +113,22 @@ class JavaEntity
             this.Entity.model.model.meshInstances[0].material.update();   
         }        
 
-        if(entityData.sketchFabFile)
+        if(entityData.sketchFabFolder)
         {
             var current = this;
 
-            app.assets.loadFromUrl('./sketchFab/'+entityData.sketchFabFile+'.gltf', 'json', function (err, asset) {
+            app.assets.loadFromUrl('./sketchFab/'+entityData.sketchFabFolder+'/scene.gltf', 'json', function (err, asset) {
             
                 var json = asset.resource;
                 var gltf = JSON.parse(json);
 
                 loadGltf(gltf, app.graphicsDevice, function (model, textures, animationClips) {
-                    // Wrap the model as an asset and add to the asset registry
-                    var asset = new pc.Asset('gltf', 'model', {
-                        url: ''
-                    });
-                    asset.resource = model;
-                    asset.loaded = true;
-                    app.assets.add(asset);
-
                     current.Entity.model.model = model;
                 }, {
-                    basePath: './sketchFab/'
+                    basePath: './sketchFab/'+entityData.sketchFabFolder+'/'//path for textures and bin
                 });
             });
         }
-
 
 
         // Add to hierarchy
