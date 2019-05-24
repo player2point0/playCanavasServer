@@ -75,6 +75,12 @@ function boilerPlate()
 async function serverWork()
 {
     var startData = await getServerData("playCanvasStart");
+    
+    if(startData.vr)
+    {
+        console.log("vr");
+    }
+
     var serverEntities = startData.entities;    
 
     for(var i = 0;i<serverEntities.length;i++)

@@ -55,7 +55,7 @@ public class SketchFabView extends DynamicWebPage {
             //String path = "C:\\Users\\makerspacestaff\\Documents\\playcanvas\\playCanvasServer\\httpdocs\\sketchFab\\b52a08120c059008.zip\\out\\b52a08120c059008\\"+"ad10226b4f7a451ea23920a556c72a90.zip";
     		//String path1 = "C:\\Users\\makerspacestaff\\Documents\\playcanvas\\playCanvasServer\\httpdocs\\sketchFab\\chicken";
             
-            String query = "cat";
+            String query = "box";
             
             
             try {
