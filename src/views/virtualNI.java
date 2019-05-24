@@ -48,7 +48,7 @@ public class virtualNI extends DynamicWebPage {
         {
             String stringToSendToWebBrowser = "<html>\n" + 
         			"<head>"+
-            			"<script src=\"https://code.playcanvas.com/playcanvas-latest.js\"></script>\n" + 
+        				"<script src=\"./js/playcanvas-latest.js\"></script>\n" + 
             			"<script src=\"./js/JavaEntity.js\"></script>\n" + 
             			"<script src=\"./js/FirstPersonCam.js\"></script>\n" + 
                         "<link href=\"css/stats.css\" rel=\"stylesheet\" type=\"text/css\">" +
@@ -102,6 +102,8 @@ public class virtualNI extends DynamicWebPage {
                     
             responseData.put("time", System.currentTimeMillis()); 
                         
+            responseData.put("vr", true); 
+            
             toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );
             return true;
         }

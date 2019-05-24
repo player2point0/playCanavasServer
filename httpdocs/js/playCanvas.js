@@ -1,6 +1,8 @@
 var canvas;
 var app;
-const url = "http://localhost:8080/";
+var camera;
+var vr;
+const url = "http://169.254.100.33:8080/";//"http://localhost:8080/";
 const loopDelay = 100;//takes about 15 for server response
 var entities = [];
 
@@ -36,7 +38,7 @@ function boilerPlate()
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     // Create camera entity
-    var fpCamera = new FirstPersonCam(0, 0, 30, 0, 0, 0, app);
+    camera = new FirstPersonCam(0, 0, 30, 0, 0, 0, app);
 
     // Create directional light entity
     var mainLight = new pc.Entity();
@@ -78,7 +80,35 @@ async function serverWork()
     
     if(startData.vr)
     {
-        console.log("vr");
+
+        var current = this;
+
+        if(navigator.getVRDisplays) {
+            console.log('WebVR 1.1 supported');
+            // Then get the displays attached to the computer
+            navigator.getVRDisplays().then(function(displays) {
+              // If a display is available, use it to present the scene
+              if(displays.length > 0) {
+                vrDisplay = displays[0];
+
+                app.vr = new pc.VrManager(app, vrDisplay);
+        
+                var h1 = document.createElement("h1");
+                h1.innerHTML = "display "+vrDisplay;
+                document.body.appendChild(h1);
+
+                current.camera.camera.camera.enterVr(function (err) {
+                    if (err) {
+                        console.error(err); // could not enter VR
+                    } else {
+                        // in VR!
+                    }
+                });
+              }
+            });
+          }
+
+        
     }
 
     var serverEntities = startData.entities;    

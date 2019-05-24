@@ -125,19 +125,20 @@ public class Main
 		        //this will mean that a static index.html page will be loaded as default
 		        //the example dynamic page will process the request if the index.html file is not present
 	        	if(toProcess.path.length()==0)
-	        		toProcess.path = "playCanvas";
+	        		toProcess.path = "playcanvas";
 
 	        	//Uncomment this code to see an example dynamic page or an example dynamic page that responds to a form
 //		        if(exampleDynamicPage.process(toProcess))
 //		        {		        	//example page is processed
 //		        }
 		        //else
-		        boolean page = sketchFabPage.process(toProcess);/*virtualNIPage.process(toProcess);*//*textureStreamPage.process(toProcess);*//*projectHumanPage.process(toProcess);*//*brainUIPage.process(toProcess);*//*playCanvasViewPage.process(toProcess);*/
+		        boolean page = /*sketchFabPage.process(toProcess);*/virtualNIPage.process(toProcess);/*textureStreamPage.process(toProcess);*//*projectHumanPage.process(toProcess);*//*brainUIPage.process(toProcess);*//*playCanvasViewPage.process(toProcess);*/
 	        	
 	        	
 	        	if(page) {
 			    }
-			    else{
+			    else
+			    {
 			        String asFilepath = fileStoreInterface.decodeFilePath(toProcess.path);
 			        if((asFilepath!=null)&&fileStoreInterface.exists(asFilepath))
 			        {

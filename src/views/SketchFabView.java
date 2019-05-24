@@ -30,7 +30,7 @@ public class SketchFabView extends DynamicWebPage {
         {
             String stringToSendToWebBrowser = "<html>\n" + 
         			"<head>"+
-            			"<script src=\"https://code.playcanvas.com/playcanvas-latest.js\"></script>\n" + 
+            			"<script src=\"./js/playcanvas-latest.js\"></script>\n" + 
             			"<script src=\"./js/playcanvas-anim.js\"></script>\n" + 
             			"<script src=\"./js/playcanvas-gltf.js\"></script>\n" +
             			"<script src=\"./js/JavaEntity.js\"></script>\n" +  
