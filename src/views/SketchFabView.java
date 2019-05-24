@@ -2,12 +2,14 @@ package views;
 
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.net.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+import java.io.*;
 
 import org.json.JSONArray;
 import storage.DatabaseInterface;
@@ -50,15 +52,22 @@ public class SketchFabView extends DynamicWebPage {
             JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
             
-            String path = "C:\\Users\\makerspacestaff\\Documents\\playcanvas\\playCanvasServer\\httpdocs\\sketchFab\\b52a08120c059008.zip\\out\\b52a08120c059008\\"+"ad10226b4f7a451ea23920a556c72a90.zip";
-    		String path1 = "C:\\Users\\makerspacestaff\\Documents\\playcanvas\\playCanvasServer\\httpdocs\\sketchFab\\chicken";
+            //String path = "C:\\Users\\makerspacestaff\\Documents\\playcanvas\\playCanvasServer\\httpdocs\\sketchFab\\b52a08120c059008.zip\\out\\b52a08120c059008\\"+"ad10226b4f7a451ea23920a556c72a90.zip";
+    		//String path1 = "C:\\Users\\makerspacestaff\\Documents\\playcanvas\\playCanvasServer\\httpdocs\\sketchFab\\chicken";
             
-            unzip(path, path1);
+            String query = "cat";
             
+            
+            try {
+				getSketchFabModel(query);
+			} catch (Exception e) {
+				query = "dog";
+				e.printStackTrace();
+			}
             
             JSONObject entity1 = new JSONObject();
             entity1.put("model", "box");
-            entity1.put("sketchFabFolder", "chicken");
+            entity1.put("sketchFabFolder", query);
             entity1.put("scriptName", "rotate1");
             entity1.put("script", "this.entity.rotate(0, 10 * dt, 0);");
             
@@ -67,6 +76,8 @@ public class SketchFabView extends DynamicWebPage {
             responseData.put("entities", entities);
                     
             responseData.put("time", System.currentTimeMillis()); 
+            responseData.put("vr", true); 
+            
                         
             toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );
             return true;
@@ -88,43 +99,106 @@ public class SketchFabView extends DynamicWebPage {
         return false;
     }
     
-    private static void unzip(String zipFilePath, String destDir)
+    
+    public void getSketchFabModel(String query) throws Exception
     {
-        File dir = new File(destDir);
-        // create output directory if it doesn't exist
-        if(!dir.exists()) dir.mkdirs();
-        FileInputStream fis;
-        //buffer for read and write data to file
-        byte[] buffer = new byte[1024];
-        try {
-            fis = new FileInputStream(zipFilePath);
-            ZipInputStream zis = new ZipInputStream(fis);
-            ZipEntry ze = zis.getNextEntry();
-            while(ze != null){
-                String fileName = ze.getName();
-                File newFile = new File(destDir + File.separator + fileName);
-                System.out.println("Unzipping to "+newFile.getAbsolutePath());
-                //create directories for sub directories in zip
-                new File(newFile.getParent()).mkdirs();
-                FileOutputStream fos = new FileOutputStream(newFile);
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                fos.write(buffer, 0, len);
-                }
-                fos.close();
-                //close this ZipEntry
-                zis.closeEntry();
-                ze = zis.getNextEntry();
-            }
-            //close last ZipEntry
-            zis.closeEntry();
-            zis.close();
-            fis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    	String webURL = "http://169.254.100.38:5000/sfscraper/get?query="+query+"&max_items=1&wait=on";
+    	URL oracle = new URL(webURL);
+        URLConnection yc = oracle.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+        String page = in.readLine();
+        String jobID = "";
+        in.close();
+        
+        for(int i = 8;i<page.length();i++)
+        {
+        	if(page.charAt(i) == '<')break;
+        	jobID += page.charAt(i);
         }
         
+        String downloadURL = "http://169.254.100.38:5000/sfscraper/download/"+jobID;        
+    	System.out.println("downloading");
+
+        try (BufferedInputStream inputStream = new BufferedInputStream(new URL(downloadURL).openStream()))  
+		{
+        	System.out.println("downloaded");  	
+        	
+        	//Open the file
+            try(ZipInputStream stream = new ZipInputStream(inputStream))
+            {
+            
+            	String outDir = "httpdocs/sketchFab/"+query+"/";
+            	
+    			ZipEntry entry;
+	            while ((entry = stream.getNextEntry()) != null) {
+
+    				String name = entry.getName();
+    				long size = entry.getSize();
+    				long compressedSize = entry.getCompressedSize();
+    				System.out.printf("name: %-20s | size: %6d | compressed size: %6d\n", 
+    						name, size, compressedSize);
+
+    				File file = new File(outDir+name);
+    				if (name.endsWith("/")) {
+    					file.mkdirs();
+    					continue;
+    				}
+
+    				File parent = file.getParentFile();
+    				if (parent != null) {
+    					parent.mkdirs();
+    				}
+
+    		        
+    				FileOutputStream fos = new FileOutputStream(file);
+    				byte[] bytes = new byte[1024];
+    				int length;
+    				while ((length = stream.read(bytes)) >= 0) {
+    					fos.write(bytes, 0, length);
+    				}
+    				
+    				
+    				if(name.endsWith(".zip"))
+    				{	
+    					ZipFile zipFile = new ZipFile(outDir+name);
+    					Enumeration<?> enu = zipFile.entries();
+    					while (enu.hasMoreElements()) {
+    						ZipEntry zipEntry = (ZipEntry) enu.nextElement();
+
+    						name = zipEntry.getName();
+    						size = zipEntry.getSize();
+    						compressedSize = zipEntry.getCompressedSize();
+    						System.out.printf("name: %-20s | size: %6d | compressed size: %6d\n", 
+    								name, size, compressedSize);
+
+    						file = new File(outDir+name);
+    						if (name.endsWith("/")) {
+    							file.mkdirs();
+    							continue;
+    						}
+
+    						parent = file.getParentFile();
+    						if (parent != null) {
+    							parent.mkdirs();
+    						}
+
+    						InputStream is = zipFile.getInputStream(zipEntry);
+    						fos = new FileOutputStream(file);
+    						bytes = new byte[1024];
+    						
+    						while ((length = is.read(bytes)) >= 0) {
+    							fos.write(bytes, 0, length);
+    						}
+    						is.close();
+    						fos.close();
+
+    					}
+    					zipFile.close();
+    				
+    				}	
+    			}
+            }
+		} 
     }
-    
 
 }
