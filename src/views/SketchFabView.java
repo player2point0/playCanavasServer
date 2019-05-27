@@ -26,7 +26,7 @@ public class SketchFabView extends DynamicWebPage {
     
     public boolean process(WebRequest toProcess)
     {
-        if(toProcess.path.equalsIgnoreCase("playCanvas"))
+        if(toProcess.path.equalsIgnoreCase("sketchfab"))
         {
             String stringToSendToWebBrowser = "<html>\n" + 
         			"<head>"+
@@ -47,7 +47,7 @@ public class SketchFabView extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvasStart"))
+        else if(toProcess.path.equalsIgnoreCase("sketchfab/playCanvasStart"))
         { 	  	
             JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
@@ -83,7 +83,7 @@ public class SketchFabView extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvasUpdate"))
+        else if(toProcess.path.equalsIgnoreCase("sketchfab/playCanvasUpdate"))
         {  	
         	JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();

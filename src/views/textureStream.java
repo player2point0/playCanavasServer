@@ -21,7 +21,7 @@ public class textureStream extends DynamicWebPage {
     
     public boolean process(WebRequest toProcess)
     {
-        if(toProcess.path.equalsIgnoreCase("playCanvas"))
+        if(toProcess.path.equalsIgnoreCase("texture"))
         {
             String stringToSendToWebBrowser = "<html>\n" + 
         			"<head>"+
@@ -40,7 +40,7 @@ public class textureStream extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvasStart"))
+        else if(toProcess.path.equalsIgnoreCase("texture/playCanvasStart"))
         { 	  	
             JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
@@ -62,6 +62,8 @@ public class textureStream extends DynamicWebPage {
             entities.put(0, entity1);       
             
             responseData.put("entities", entities);
+            
+            responseData.put("vr", true); 
                     
             responseData.put("time", System.currentTimeMillis()); 
                         
@@ -69,7 +71,7 @@ public class textureStream extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvasUpdate"))
+        else if(toProcess.path.equalsIgnoreCase("texture/playCanvasUpdate"))
         {  	
         	JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();

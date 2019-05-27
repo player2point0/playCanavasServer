@@ -44,7 +44,7 @@ public class virtualNI extends DynamicWebPage {
     
     public boolean process(WebRequest toProcess)
     {
-        if(toProcess.path.equalsIgnoreCase("playCanvas"))
+        if(toProcess.path.equalsIgnoreCase("virtualni"))
         {
             String stringToSendToWebBrowser = "<html>\n" + 
         			"<head>"+
@@ -63,7 +63,7 @@ public class virtualNI extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvasStart"))
+        else if(toProcess.path.equalsIgnoreCase("virtualni/playCanvasStart"))
         { 	  	
             JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
@@ -108,7 +108,7 @@ public class virtualNI extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvasUpdate"))
+        else if(toProcess.path.equalsIgnoreCase("virtualni/playCanvasUpdate"))
         {  	
         	JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();

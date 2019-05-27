@@ -64,6 +64,17 @@ class JavaEntity
         if(entityData.zScale) this.zScale = entityData.zScale;
         this.Entity.setLocalScale(this.xScale, this.yScale, this.zScale);
 
+        //for raycasting
+        if(entityData.boundingBoxX && entityData.boundingBoxY && entityData.boundingBoxZ)
+        {
+            //	Half the distance across the box in each axis
+            var center = new pc.Vec3(this.x, this.y, this.z);
+            var bounds = new pc.Vec3(entityData.boundingBoxX, entityData.boundingBoxY, entityData.boundingBoxZ);
+            this.Entity.aabb = new pc.BoundingBox(center, bounds);
+            this._min = new pc.Vec3;
+            this._max = new pc.Vec3;
+        }
+
         if(entityData.script)
         {
             var scriptName = "default"; 
@@ -85,8 +96,6 @@ class JavaEntity
         if(entityData.textureURL)
         {
             this.textureURL = entityData.textureURL;
-
-
         }
 
         if(entityData.texture)

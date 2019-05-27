@@ -2,7 +2,7 @@ var canvas;
 var app;
 var camera;
 var vr;
-const url = "http://169.254.100.33:8080/";//"http://localhost:8080/";
+const url = window.location.href //"http://169.254.100.33:8080/";//"http://localhost:8080/";
 const loopDelay = 100;//takes about 15 for server response
 var entities = [];
 
@@ -16,7 +16,7 @@ setTimeout(loop, loopDelay);
 
 async function getServerData(endpoint)
 {
-    let response = await fetch(url+endpoint);
+    let response = await fetch(url+"/"+endpoint);
     
     let data = await response.json();
 
@@ -38,7 +38,7 @@ function boilerPlate()
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     // Create camera entity
-    camera = new FirstPersonCam(0, 0, 30, 0, 0, 0, true, app);
+    camera = new FirstPersonCam(0, 0, 30, 0, 0, 0, true, true, app);
 
     // Create directional light entity
     var mainLight = new pc.Entity();
@@ -91,6 +91,8 @@ async function serverWork()
                 current.app.vr.display.on("presentchange", current._onVrPresentChange, current);
                 if (current.app.vr.display.display.bufferScale_) current.app.vr.display.display.bufferScale_ = 0.5;
             }
+
+            if(!current.app.vr.display) return;
 
             alert("entering vr");
             current.camera.camera.camera.enterVr(function (err) {

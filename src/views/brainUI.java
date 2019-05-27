@@ -19,7 +19,9 @@ public class brainUI extends DynamicWebPage {
     
     public boolean process(WebRequest toProcess)
     {
-        if(toProcess.path.equalsIgnoreCase("playCanvas"))
+    	System.out.println(toProcess.path);
+    	
+        if(toProcess.path.equalsIgnoreCase("brain"))
         {
             String stringToSendToWebBrowser = "<html>\n" + 
         			"<head>"+
@@ -38,7 +40,7 @@ public class brainUI extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvasStart"))
+        else if(toProcess.path.equalsIgnoreCase("brain/playCanvasStart"))
         { 	  	
             JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
@@ -74,7 +76,7 @@ public class brainUI extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvasUpdate"))
+        else if(toProcess.path.equalsIgnoreCase("brain/playCanvasUpdate"))
         {  	
         	JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();

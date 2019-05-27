@@ -127,15 +127,13 @@ public class Main
 	        	if(toProcess.path.length()==0)
 	        		toProcess.path = "playcanvas";
 
-	        	//Uncomment this code to see an example dynamic page or an example dynamic page that responds to a form
-//		        if(exampleDynamicPage.process(toProcess))
-//		        {		        	//example page is processed
-//		        }
-		        //else
-		        boolean page = /*sketchFabPage.process(toProcess);*/virtualNIPage.process(toProcess);/*textureStreamPage.process(toProcess);*//*projectHumanPage.process(toProcess);*//*brainUIPage.process(toProcess);*//*playCanvasViewPage.process(toProcess);*/
 	        	
-	        	
-	        	if(page) {
+	        	if(sketchFabPage.process(toProcess)) {
+			    }else if(virtualNIPage.process(toProcess)) {
+			    }else if(textureStreamPage.process(toProcess)) {
+			    }else if(projectHumanPage.process(toProcess)) {
+			    }else if(brainUIPage.process(toProcess)) {
+			    }else if(playCanvasViewPage.process(toProcess)) {
 			    }
 			    else
 			    {

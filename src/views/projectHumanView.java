@@ -44,7 +44,7 @@ public class projectHumanView extends DynamicWebPage {
     
     public boolean process(WebRequest toProcess)
     {
-        if(toProcess.path.equalsIgnoreCase("playCanvas"))
+        if(toProcess.path.equalsIgnoreCase("human"))
         {
             String stringToSendToWebBrowser = "<html>\n" + 
         			"<head>"+
@@ -63,7 +63,7 @@ public class projectHumanView extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvasStart"))
+        else if(toProcess.path.equalsIgnoreCase("human/playCanvasStart"))
         { 	  	
         	GeneralMatrixObject skeletons = new GeneralMatrixObject(1);
         	GeneralMatrixObject skins = new GeneralMatrixObject(1);
@@ -210,7 +210,7 @@ public class projectHumanView extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvasUpdate"))
+        else if(toProcess.path.equalsIgnoreCase("human/playCanvasUpdate"))
         {  	
         	JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
