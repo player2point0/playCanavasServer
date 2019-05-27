@@ -38,7 +38,7 @@ function boilerPlate()
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     // Create camera entity
-    camera = new FirstPersonCam(0, 0, 30, 0, 0, 0, app);
+    camera = new FirstPersonCam(0, 0, 30, 0, 0, 0, true, app);
 
     // Create directional light entity
     var mainLight = new pc.Entity();
@@ -80,35 +80,27 @@ async function serverWork()
     
     if(startData.vr)
     {
-
+        if (window.WebVRConfig) WebVRConfig.BUFFER_SCALE = 0.5;
+   
+        app.vr = new pc.VrManager(app);
         var current = this;
 
-        if(navigator.getVRDisplays) {
-            console.log('WebVR 1.1 supported');
-            // Then get the displays attached to the computer
-            navigator.getVRDisplays().then(function(displays) {
-              // If a display is available, use it to present the scene
-              if(displays.length > 0) {
-                vrDisplay = displays[0];
+        addEventListener("mousedown",  e => 
+        {
+            if (current.app.vr && current.app.vr.display) {
+                current.app.vr.display.on("presentchange", current._onVrPresentChange, current);
+                if (current.app.vr.display.display.bufferScale_) current.app.vr.display.display.bufferScale_ = 0.5;
+            }
 
-                app.vr = new pc.VrManager(app, vrDisplay);
-        
-                var h1 = document.createElement("h1");
-                h1.innerHTML = "display "+vrDisplay;
-                document.body.appendChild(h1);
-
-                current.camera.camera.camera.enterVr(function (err) {
-                    if (err) {
-                        console.error(err); // could not enter VR
-                    } else {
-                        // in VR!
-                    }
-                });
-              }
+            alert("entering vr");
+            current.camera.camera.camera.enterVr(function (err) {
+                if (err) {
+                    var h1 = document.createElement("h1");
+                    h1.innerHTML = err;
+                    document.body.appendChild(h1);
+                }
             });
-          }
-
-        
+        });         
     }
 
     var serverEntities = startData.entities;    

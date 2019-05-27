@@ -107,6 +107,19 @@ public class virtualNI extends DynamicWebPage {
             toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );
             return true;
         }
+        
+        else if(toProcess.path.equalsIgnoreCase("playCanvasUpdate"))
+        {  	
+        	JSONObject responseData = new JSONObject();
+            JSONArray entities = new JSONArray();
+            
+            responseData.put("entities", entities);
+                    
+            responseData.put("time", System.currentTimeMillis()); 
+                        
+            toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );
+            return true;
+        }
          
         return false;
     }

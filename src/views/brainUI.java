@@ -43,7 +43,7 @@ public class brainUI extends DynamicWebPage {
             JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
                    
-            double cubeNum = 12;
+            double cubeNum = 9;
             double angleAmt = (2*Math.PI) / cubeNum;
             double dis = 5;
             
@@ -65,6 +65,8 @@ public class brainUI extends DynamicWebPage {
             }  
             
             responseData.put("entities", entities);
+            
+            responseData.put("vr", true); 
                     
             responseData.put("time", System.currentTimeMillis()); 
                         
@@ -77,7 +79,7 @@ public class brainUI extends DynamicWebPage {
         	JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
             
-            double cubeNum = 12;
+            double cubeNum = 9;
             double angleAmt = (2*Math.PI) / cubeNum;
             double dis = 5;
             offset += 0.0375;

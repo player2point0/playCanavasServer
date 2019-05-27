@@ -1,6 +1,6 @@
 class FirstPersonCam{
 
-    constructor(x, y, z, xRotate, yRotate, zRotate, app)
+    constructor(x, y, z, xRotate, yRotate, zRotate, activated, app)
     {
         this.x = x;
         this.y = y;
@@ -14,68 +14,71 @@ class FirstPersonCam{
             clearColor: new pc.Color(0.1, 0.2, 0.3)
         });
         
-        //first person camera  
-        addEventListener("mousemove", e => {
+        if(activated)
+        {
+            //first person camera  
+            addEventListener("mousemove", e => {
+                
+                // If pointer is disabled
+                // If the left mouse button is down update the camera from mouse movement
+                if (pc.Mouse.isPointerLocked() || e.buttons[0]) 
+                {
+                    var speed = 0.1;
+
+                    this.camera.eulerAngles.x = this.camera.eulerAngles.x - speed * e.movementY;
+                    this.camera.eulerAngles.y = this.camera.eulerAngles.y - speed * e.movementX;
+
+                    this.camera.setEulerAngles(this.camera.eulerAngles.x, this.camera.eulerAngles.y, 0);
+
+                    //console.log("rotation "+this.camera.eulerAngles);
+                }
+            });
             
-            // If pointer is disabled
-            // If the left mouse button is down update the camera from mouse movement
-            if (pc.Mouse.isPointerLocked() || e.buttons[0]) 
-            {
-                var speed = 0.1;
+            addEventListener("mousedown",  e => {
+                canvas.requestPointerLock()
+            });   
 
-                this.camera.eulerAngles.x = this.camera.eulerAngles.x - speed * e.movementY;
-                this.camera.eulerAngles.y = this.camera.eulerAngles.y - speed * e.movementX;
+            addEventListener("keypress", e => {
+                
+                var speed = 1;
+                var forward = this.camera.forward;
+                var right = this.camera.right;
+                var up = this.camera.up;
 
-                this.camera.setEulerAngles(this.camera.eulerAngles.x, this.camera.eulerAngles.y, 0);
+                if(e.key == "w")
+                {
+                    this.x += forward.x * speed;
+                    this.z += forward.z * speed;
+                }
+                if(e.key == "s")
+                {
+                    this.x -= forward.x * speed;
+                    this.z -= forward.z * speed;
+                }
+                if(e.key == "a")
+                {
+                    this.x -= right.x * speed;
+                    this.z -= right.z * speed;
+                }
+                if(e.key == "d")
+                {
+                    this.x += right.x * speed;
+                    this.z += right.z * speed;
+                }
+                if(e.key == "q")
+                {
+                    this.y += up.y * speed;
+                }
+                if(e.key == "e")
+                {
+                    this.y -= up.y * speed;
+                }
 
-                //console.log("rotation "+this.camera.eulerAngles);
-            }
-        });
-        
-        addEventListener("mousedown",  e => {
-            canvas.requestPointerLock()
-        });   
-
-        addEventListener("keypress", e => {
-            
-            var speed = 1;
-            var forward = this.camera.forward;
-            var right = this.camera.right;
-            var up = this.camera.up;
-
-            if(e.key == "w")
-            {
-                this.x += forward.x * speed;
-                this.z += forward.z * speed;
-            }
-            if(e.key == "s")
-            {
-                this.x -= forward.x * speed;
-                this.z -= forward.z * speed;
-            }
-            if(e.key == "a")
-            {
-                this.x -= right.x * speed;
-                this.z -= right.z * speed;
-            }
-            if(e.key == "d")
-            {
-                this.x += right.x * speed;
-                this.z += right.z * speed;
-            }
-            if(e.key == "q")
-            {
-                this.y += up.y * speed;
-            }
-            if(e.key == "e")
-            {
-                this.y -= up.y * speed;
-            }
-
-            this.camera.setPosition(this.x, this.y, this.z);
-            
-            //console.log("position "+this.camera.position);
-        });
+                this.camera.setPosition(this.x, this.y, this.z);
+                
+                //console.log("position "+this.camera.position);
+            });
+        }
 
         app.root.addChild(this.camera);
         this.camera.setPosition(this.x, this.y, this.z);
