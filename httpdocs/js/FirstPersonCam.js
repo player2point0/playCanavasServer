@@ -18,6 +18,16 @@ class FirstPersonCam{
 
         if(raycast)
         {
+            //could sort by distance
+
+            this.reticle = new pc.Entity();
+            this.reticle.addComponent("model", {
+                type: "sphere"
+            });
+            this.reticle.setLocalScale(0.5, 0.5, 0.5);
+
+            this.app.root.addChild(this.reticle);
+
             this.ray = new pc.Ray();
             
             var current = this;
@@ -32,21 +42,21 @@ class FirstPersonCam{
                 // Test the ray against all the objects registered to this picker
                 for (var i = 0; i < current.app.root._children.length; ++i) {
                     var pickableShape = current.app.root._children[i].aabb ;
-                    var position = current.app.root._children[i].getPosition();
 
                     if(!pickableShape) continue;
 
-                    var result = pickableShape.intersectsRay(current.ray, null);                    
+                    var hit = new pc.Vec3();
+                    var result = pickableShape.intersectsRay(current.ray, hit);                    
 
-                    if (result) {
-                        console.log(position);
+                    if (result) 
+                    {
+                        this.reticle.setPosition(hit);
+                        console.log(hit);
                     }  
                 }    
-               
             }); 
 
         }
-
 
         if(activated)
         {

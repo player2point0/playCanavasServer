@@ -61,6 +61,9 @@ public class brainUI extends DynamicWebPage {
             	entity.put("realtimeModel", true);
             	entity.put("x", x);
             	entity.put("z", z);
+                entity.put("boundingBoxX", 0.5);
+                entity.put("boundingBoxY", 0.5);
+                entity.put("boundingBoxZ", 0.5);
             	entity.put("yRotate", (angle * (180/Math.PI)));
             	
             	entities.put(i, entity);
