@@ -39,11 +39,35 @@ class FirstPersonCam{
                 current.ray.origin.copy(current.camera.getPosition());
                 current.ray.direction.copy(current.camera.forward);
                 
-                // Test the ray against all the objects registered to this picker
-                for (var i = 0; i < current.app.root._children.length; ++i) {
-                    var pickableShape = current.app.root._children[i].aabb ;
+                var pickable = [];
+                var distancePickables = [];
+                
+                // all objects with a collider
+                for (var i = 0; i < current.app.root._children.length; ++i) 
+                {
+                    var pickableShape = current.app.root._children[i];
 
-                    if(!pickableShape) continue;
+                    if(pickableShape.aabb) pickable.push(pickableShape);
+                }
+
+                distancePickables = pickable.sort(function(a, b){
+                    var aPos = a.getPosition(); 
+                    var bPos = b.getPosition(); 
+                
+                    var aDiff = aPos.sub(current.camera.getPosition());
+                    var bDiff = bPos.sub(current.camera.getPosition());
+                
+                    var aDis = Math.abs(aDiff.length());
+                    var bDis = Math.abs(bDiff.length());
+
+                    return aDis - bDis;
+                });
+
+                
+                for (var i = 0; i < distancePickables.length; ++i) {
+                    var center = distancePickables[i].getPosition();
+                    var pickableShape = distancePickables[i].aabb;
+                    pickableShape.center = center;
 
                     var hit = new pc.Vec3();
                     var result = pickableShape.intersectsRay(current.ray, hit);                    
@@ -52,6 +76,7 @@ class FirstPersonCam{
                     {
                         this.reticle.setPosition(hit);
                         console.log(hit);
+                        break;
                     }  
                 }    
             }); 
