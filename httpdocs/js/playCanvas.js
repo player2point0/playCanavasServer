@@ -39,17 +39,23 @@ function boilerPlate()
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     // Create camera entity
-    camera = new FirstPersonCam(0, 0, 30, 0, 0, 0, true, app);
+    camera = new FirstPersonCam(0, 5, 30, 0, 0, 0, false, app);
 
     // Create directional light entity
     var mainLight = new pc.Entity();
-    mainLight.addComponent('light');
+    mainLight.addComponent('light', {
+        type: "directional",
+        color: new pc.Color(0.6, 0.6, 0.6),
+    });    
     mainLight.setEulerAngles(45, 0, 0);
     mainLight.setPosition(0, 0, 30);
     app.root.addChild(mainLight);
 
     var sideLight = new pc.Entity();
-    sideLight.addComponent('light');
+    sideLight.addComponent('light', {
+        type: "directional",
+        color: new pc.Color(0.4, 0.4, 0.4),
+    });
     sideLight.setEulerAngles(-10, -50, 0);
     sideLight.setPosition(-25, 10, 30);
     app.root.addChild(sideLight);
@@ -123,17 +129,69 @@ async function serverWork()
                     h1.innerHTML = err;
                     document.body.appendChild(h1);
                 }
+
+                else
+                {
+                    
+                    window.addEventListener("gamepadconnected", function(e) {
+                       
+                        var beam = new pc.Entity();
+                        beam.addComponent("model", {
+                            type: "sphere"
+                        });
+                        
+                        current.app.root.addChild(beam);
+                        
+                        var gamePadController = pc.createScript("gamePadController");
+                        gamePadController.prototype.update = function (dt) {            
+                
+                            var gp = current.navigator.getGamepads()[0];
+                             
+
+                            if(gp.pose.hasOrientation /*&& (gp.buttons[0].value > 0 || gp.buttons[0].pressed == true || gp.buttons[0] == 1)*/)
+                            {
+                                if(gp.pose.orientation)
+                                {
+                                    var pitch = gp.pose.orientation[0];
+                                    var yaw = gp.pose.orientation[1];
+                                    var roll = gp.pose.orientation[2];
+                                    var w = gp.pose.orientation[3];
+
+                                    var rotation = new pc.Quat(pitch, yaw, roll, w);
+
+                                    var v = new pc.Vec3(0, 0, -10);
+
+                                    var controllerVector = rotation.transformVector(v);
+
+                                    beam.setPosition(controllerVector);    
+
+                                }
+
+                                else
+                                {
+                                    var forward1 = current.camera.camera.forward;
+                                    forward1 = forward1.scale(10);
+                                    
+                                    beam.setPosition(forward1);                                        
+                                }
+                                
+                            }
+                        };
+                
+                        current.camera.camera.addComponent('script');
+                        current.camera.camera.script.create(gamePadController);  
+                        
+                    });
+                    
+
+                }
+
             });
-        });         
+        });
+          
+
+        
     }
-
-    this.reticle = new pc.Entity();
-    this.reticle.addComponent("model", {
-        type: "sphere"
-    });
-    this.reticle.setLocalScale(0.5, 0.5, 0.5);
-
-    this.app.root.addChild(this.reticle);
 
     this.ray = new pc.Ray();
     
@@ -171,7 +229,8 @@ async function serverWork()
         });
 
         
-        for (var i = 0; i < distancePickables.length; ++i) {
+        for (var i = 0; i < distancePickables.length; ++i) 
+        {
             var center = distancePickables[i].Entity.getPosition();
             var pickableShape = distancePickables[i].Entity.aabb;
             pickableShape.center = center;
@@ -181,10 +240,23 @@ async function serverWork()
 
             if (result) 
             {
-                this.reticle.setPosition(hit);
+                if(distancePickables[i].Entity.name == "ground")
+                {
+                    var hitX = hit.x;
+                    var camY = current.camera.y;
+                    var hitZ = hit.z;
+
+                    current.camera.camera.setPosition(hitX, camY, hitZ);                    
+                    break;   
+                }
+
                 var link = distancePickables[i].clickLink;
-                window.location.href = '/'+link;
-                break;
+                
+                if(link)
+                {
+                    window.location.href = '/'+link;
+                    break;    
+                }         
             }  
         }    
     }); 

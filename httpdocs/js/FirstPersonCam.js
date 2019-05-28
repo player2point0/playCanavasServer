@@ -15,26 +15,35 @@ class FirstPersonCam{
             clearColor: new pc.Color(0.1, 0.2, 0.3)
         });
 
+        var crosshair = document.createElement("h1");
+        crosshair.innerHTML = "+";
+        crosshair.style = "position: absolute;"+
+            "color: red;"+
+            "top: 50%;"+
+            "left: 50%;"+
+            "transform: translate(-50%, -50%);";
+        document.body.appendChild(crosshair);
+        
+        //first person camera  
+        addEventListener("mousemove", e => {
+            
+            // If pointer is disabled
+            // If the left mouse button is down update the camera from mouse movement
+            if (pc.Mouse.isPointerLocked() || e.buttons[0]) 
+            {
+                var speed = 0.1;
+
+                this.camera.eulerAngles.x = this.camera.eulerAngles.x - speed * e.movementY;
+                this.camera.eulerAngles.y = this.camera.eulerAngles.y - speed * e.movementX;
+
+                this.camera.setEulerAngles(this.camera.eulerAngles.x, this.camera.eulerAngles.y, 0);
+
+                //console.log("rotation "+this.camera.eulerAngles);
+            }
+        });
+            
         if(activated)
         {
-            //first person camera  
-            addEventListener("mousemove", e => {
-                
-                // If pointer is disabled
-                // If the left mouse button is down update the camera from mouse movement
-                if (pc.Mouse.isPointerLocked() || e.buttons[0]) 
-                {
-                    var speed = 0.1;
-
-                    this.camera.eulerAngles.x = this.camera.eulerAngles.x - speed * e.movementY;
-                    this.camera.eulerAngles.y = this.camera.eulerAngles.y - speed * e.movementX;
-
-                    this.camera.setEulerAngles(this.camera.eulerAngles.x, this.camera.eulerAngles.y, 0);
-
-                    //console.log("rotation "+this.camera.eulerAngles);
-                }
-            });
-            
             addEventListener("mousedown",  e => {
                 canvas.requestPointerLock()
             });   

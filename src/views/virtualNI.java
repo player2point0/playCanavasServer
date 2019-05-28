@@ -71,10 +71,14 @@ public class virtualNI extends DynamicWebPage {
             double spacing = 3;
             
     		JSONObject entity = new JSONObject();
-            entity.put("model", "plane");
+    		entity.put("name", "ground");
+    		entity.put("model", "plane");
         	entity.put("xScale", 100);
         	entity.put("zScale", 100);
-        	entity.put("x", 25);
+            entity.put("boundingBoxX", 50);
+            entity.put("boundingBoxY", 0.5);
+            entity.put("boundingBoxZ", 50);
+            entity.put("x", 25);
         	entity.put("z", 25);
         	
             entities.put(i, entity);       	
