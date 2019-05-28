@@ -5,6 +5,7 @@ var vr;
 const url = window.location.href //"http://169.254.100.33:8080/";//"http://localhost:8080/";
 const loopDelay = 100;//takes about 15 for server response
 var entities = [];
+var realtimeEntities = [];
 
 var lastTime = Date.now();
 var total = 0;
@@ -38,7 +39,7 @@ function boilerPlate()
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     // Create camera entity
-    camera = new FirstPersonCam(0, 0, 30, 0, 0, 0, true, true, app);
+    camera = new FirstPersonCam(0, 0, 30, 0, 0, 0, true, app);
 
     // Create directional light entity
     var mainLight = new pc.Entity();
@@ -60,7 +61,6 @@ function boilerPlate()
     light.setPosition(0, -30, 10);
     light.setEulerAngles(60, 0, 0);
     */
-
     
     //pbr
     app.scene.defaultMaterial.useMetalness = true;
@@ -74,11 +74,33 @@ function boilerPlate()
     });
 }
 
+
 async function serverWork()
 {
     var startData = await getServerData("playCanvasStart");
-    
-    if(startData.vr)
+  
+    var serverEntities = startData.entities;    
+
+    for(var i = 0;i<serverEntities.length;i++)
+    {
+        var entity = serverEntities[i];
+        var newEntity = new JavaEntity(entity, app); 
+
+        if((entity.name != undefined) && (newEntity.Entity.name == "Untitled")) 
+        {
+            //bug fix for first entity
+            newEntity.Entity.name = entity.name;
+        }
+
+        entities.push(newEntity);
+
+        if(entity.realtimeModel)
+        {
+            realtimeEntities.push(newEntity);
+        }
+    }
+
+    if(startData.vr )
     {
         if (window.WebVRConfig) WebVRConfig.BUFFER_SCALE = 0.5;
    
@@ -105,24 +127,67 @@ async function serverWork()
         });         
     }
 
-    var serverEntities = startData.entities;    
+    this.reticle = new pc.Entity();
+    this.reticle.addComponent("model", {
+        type: "sphere"
+    });
+    this.reticle.setLocalScale(0.5, 0.5, 0.5);
 
-    for(var i = 0;i<serverEntities.length;i++)
-    {
-        var entity = serverEntities[i];
-        var newEntity = new JavaEntity(entity, app); 
+    this.app.root.addChild(this.reticle);
 
-        if((entity.name != undefined) && (newEntity.Entity.name == "Untitled")) 
+    this.ray = new pc.Ray();
+    
+    var current = this;
+
+    addEventListener("mousedown",  e => {
+        canvas.requestPointerLock();
+
+        // Initialise the ray and work out the direction of the ray from the a screen position
+        current.ray.origin.copy(current.camera.camera.getPosition());
+        current.ray.direction.copy(current.camera.camera.forward);
+        
+        var pickable = [];
+        var distancePickables = [];
+        
+        // all objects with a collider
+        for (var i = 0; i < entities.length; ++i) 
         {
-            //bug fix for first entity
-            newEntity.Entity.name = entity.name;
+            var pickableShape = entities[i];
+
+            if(pickableShape.Entity.aabb) pickable.push(pickableShape);
         }
 
-        if(entity.realtimeModel)
-        {
-            entities.push(newEntity);
-        }
-    }
+        distancePickables = pickable.sort(function(a, b){
+            var aPos = a.Entity.getPosition(); 
+            var bPos = b.Entity.getPosition(); 
+        
+            var aDiff = aPos.sub(current.camera.camera.getPosition());
+            var bDiff = bPos.sub(current.camera.camera.getPosition());
+        
+            var aDis = Math.abs(aDiff.length());
+            var bDis = Math.abs(bDiff.length());
+
+            return aDis - bDis;
+        });
+
+        
+        for (var i = 0; i < distancePickables.length; ++i) {
+            var center = distancePickables[i].Entity.getPosition();
+            var pickableShape = distancePickables[i].Entity.aabb;
+            pickableShape.center = center;
+
+            var hit = new pc.Vec3();
+            var result = pickableShape.intersectsRay(current.ray, hit);                    
+
+            if (result) 
+            {
+                this.reticle.setPosition(hit);
+                var link = distancePickables[i].clickLink;
+                window.location.href = '/'+link;
+                break;
+            }  
+        }    
+    }); 
 }
 
 async function loop()
@@ -142,11 +207,11 @@ async function loop()
     //match names
     for(var i = 0;i<loopEntities.length;i++)
     {
-        for(var j = 0;j<entities.length;j++)
+        for(var j = 0;j<realtimeEntities.length;j++)
         {
-            if(loopEntities[i].name == entities[j].Entity.name)
+            if(loopEntities[i].name == realtimeEntities[j].Entity.name)
             {
-                entities[j].updateEntity(loopEntities[i]);
+                realtimeEntities[j].updateEntity(loopEntities[i]);
                 
                 break;
             }

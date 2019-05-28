@@ -75,6 +75,11 @@ class JavaEntity
             this._max = new pc.Vec3;
         }
 
+        if(entityData.clickLink)
+        {
+            this.clickLink = entityData.clickLink;
+        }
+
         if(entityData.script)
         {
             var scriptName = "default"; 

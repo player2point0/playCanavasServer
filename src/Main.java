@@ -81,6 +81,7 @@ public class Main
 		textureStream textureStreamPage = new textureStream(databaseInterface,fileStoreInterface);
 		virtualNI virtualNIPage = new virtualNI(databaseInterface,fileStoreInterface);
 		SketchFabView sketchFabPage = new SketchFabView(databaseInterface,fileStoreInterface);
+		menuView menuPage = new menuView(databaseInterface,fileStoreInterface);
 		
 		//this variable indicates that the program should keep running
 			//by setting this variable to false the program will exit
@@ -133,6 +134,7 @@ public class Main
 			    }else if(textureStreamPage.process(toProcess)) {
 			    }else if(projectHumanPage.process(toProcess)) {
 			    }else if(brainUIPage.process(toProcess)) {
+			    }else if(menuPage.process(toProcess)) {
 			    }else if(playCanvasViewPage.process(toProcess)) {
 			    }
 			    else
