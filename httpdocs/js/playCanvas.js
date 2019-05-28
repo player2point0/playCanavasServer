@@ -131,8 +131,7 @@ async function serverWork()
                 }
 
                 else
-                {
-                    
+                {              
                     window.addEventListener("gamepadconnected", function(e) {
                        
                         var beam = new pc.Entity();
@@ -145,10 +144,9 @@ async function serverWork()
                         var gamePadController = pc.createScript("gamePadController");
                         gamePadController.prototype.update = function (dt) {            
                 
-                            var gp = current.navigator.getGamepads()[0];
-                             
+                            var gp = current.navigator.getGamepads()[0];           
 
-                            if(gp.pose.hasOrientation /*&& (gp.buttons[0].value > 0 || gp.buttons[0].pressed == true || gp.buttons[0] == 1)*/)
+                            if(gp.pose.hasOrientation)
                             {
                                 if(gp.pose.orientation)
                                 {
@@ -163,18 +161,16 @@ async function serverWork()
 
                                     var controllerVector = rotation.transformVector(v);
 
-                                    beam.setPosition(controllerVector);    
+                                    beam.setPosition(controllerVector);
 
+                                    if(gp.buttons[0].value > 0 || gp.buttons[0].pressed == true || gp.buttons[1].value > 0 || gp.buttons[1].pressed == true)
+                                    {
+
+                                        //add a parent object to camera and change that for vr
+                                        current.raycast(current.camera.camera.getPosition(), controllerVector.normalise(), current)
+                                    }
                                 }
 
-                                else
-                                {
-                                    var forward1 = current.camera.camera.forward;
-                                    forward1 = forward1.scale(10);
-                                    
-                                    beam.setPosition(forward1);                                        
-                                }
-                                
                             }
                         };
                 
@@ -182,84 +178,85 @@ async function serverWork()
                         current.camera.camera.script.create(gamePadController);  
                         
                     });
-                    
-
                 }
-
             });
         });
-          
-
         
     }
 
-    this.ray = new pc.Ray();
     
     var current = this;
 
     addEventListener("mousedown",  e => {
         canvas.requestPointerLock();
 
-        // Initialise the ray and work out the direction of the ray from the a screen position
-        current.ray.origin.copy(current.camera.camera.getPosition());
-        current.ray.direction.copy(current.camera.camera.forward);
-        
-        var pickable = [];
-        var distancePickables = [];
-        
-        // all objects with a collider
-        for (var i = 0; i < entities.length; ++i) 
-        {
-            var pickableShape = entities[i];
-
-            if(pickableShape.Entity.aabb) pickable.push(pickableShape);
-        }
-
-        distancePickables = pickable.sort(function(a, b){
-            var aPos = a.Entity.getPosition(); 
-            var bPos = b.Entity.getPosition(); 
-        
-            var aDiff = aPos.sub(current.camera.camera.getPosition());
-            var bDiff = bPos.sub(current.camera.camera.getPosition());
-        
-            var aDis = Math.abs(aDiff.length());
-            var bDis = Math.abs(bDiff.length());
-
-            return aDis - bDis;
-        });
-
-        
-        for (var i = 0; i < distancePickables.length; ++i) 
-        {
-            var center = distancePickables[i].Entity.getPosition();
-            var pickableShape = distancePickables[i].Entity.aabb;
-            pickableShape.center = center;
-
-            var hit = new pc.Vec3();
-            var result = pickableShape.intersectsRay(current.ray, hit);                    
-
-            if (result) 
-            {
-                if(distancePickables[i].Entity.name == "ground")
-                {
-                    var hitX = hit.x;
-                    var camY = current.camera.y;
-                    var hitZ = hit.z;
-
-                    current.camera.camera.setPosition(hitX, camY, hitZ);                    
-                    break;   
-                }
-
-                var link = distancePickables[i].clickLink;
-                
-                if(link)
-                {
-                    window.location.href = '/'+link;
-                    break;    
-                }         
-            }  
-        }    
+        raycast(current.camera.camera.getPosition(), current.camera.camera.forward, current)
     }); 
+}
+
+function raycast(origin, direction, current)
+{
+    // Initialise the ray and work out the direction of the ray from the a screen position
+    this.ray = new pc.Ray();
+
+    current.ray.origin.copy(origin);
+    current.ray.direction.copy(direction);
+
+    var pickable = [];
+    var distancePickables = [];
+
+    // all objects with a collider
+    for (var i = 0; i < entities.length; ++i) 
+    {
+        var pickableShape = entities[i];
+
+        if(pickableShape.Entity.aabb) pickable.push(pickableShape);
+    }
+
+    distancePickables = pickable.sort(function(a, b){
+        var aPos = a.Entity.getPosition(); 
+        var bPos = b.Entity.getPosition(); 
+
+        var aDiff = aPos.sub(current.camera.camera.getPosition());
+        var bDiff = bPos.sub(current.camera.camera.getPosition());
+
+        var aDis = Math.abs(aDiff.length());
+        var bDis = Math.abs(bDiff.length());
+
+        return aDis - bDis;
+    });
+
+
+    for (var i = 0; i < distancePickables.length; ++i) 
+    {
+        var center = distancePickables[i].Entity.getPosition();
+        var pickableShape = distancePickables[i].Entity.aabb;
+        pickableShape.center = center;
+
+        var hit = new pc.Vec3();
+        var result = pickableShape.intersectsRay(current.ray, hit);                    
+
+        if (result) 
+        {
+            if(distancePickables[i].Entity.name == "ground")
+            {
+                var hitX = hit.x;
+                var camY = current.camera.y;
+                var hitZ = hit.z;
+
+                current.camera.camera.setPosition(hitX, camY, hitZ);                    
+                break;   
+            }
+
+            var link = distancePickables[i].clickLink;
+            
+            if(link)
+            {
+                window.location.href = '/'+link;
+                break;    
+            }         
+        }  
+    }    
 }
 
 async function loop()
