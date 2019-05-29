@@ -249,6 +249,8 @@ function raycast(origin, direction, current)
             }
 
             var link = distancePickables[i].clickLink;
+
+            console.log(link);
             
             if(link)
             {

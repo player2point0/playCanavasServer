@@ -44,25 +44,20 @@ public class menuView extends DynamicWebPage {
             JSONArray entities = new JSONArray();
             
             
-            
-            JSONObject entity = new JSONObject();
-            entity.put("model", "plane");
-            entity.put("x", 0);
-            entity.put("y", 0);
-            entity.put("z", 0);
-            entity.put("xRotate", 90);
-            entity.put("clickLink", "virtualni");
-            
-            
-            
-        	
-            entity.put("boundingBoxX", 0.5);
-            entity.put("boundingBoxY", 0.5);
-            entity.put("boundingBoxZ", 0.5);
-            
-            
-            entities.put(0, entity);
-                   
+            JSONObject topLeft = menuTile(-1, 1, 0, "scenedetect");
+            entities.put(0, topLeft);
+            JSONObject top = menuTile(0, 1, 0, "bodydetect");
+            entities.put(1, top);
+            JSONObject topRight = menuTile(1, 1, 0, "facedetect");
+            entities.put(2, topRight);
+            JSONObject centerLeft = menuTile(-1, 0, 0, "voicedetect");
+            entities.put(3, centerLeft);
+            JSONObject center = menuTile(0, 0, 0, "auto");
+            entities.put(4, center);
+            JSONObject centerRight = menuTile(3, 0, 0, "virtualni");
+            entities.put(5, centerRight);
+            JSONObject bottomLeft = menuTile(-1, -1, 0, "virtualnistats");
+            entities.put(6, bottomLeft);
             
             responseData.put("entities", entities);
                     
@@ -87,5 +82,23 @@ public class menuView extends DynamicWebPage {
          
         return false;
     }
+    
+    
+    public JSONObject menuTile(double x, double y, double z, String link)
+    {
+        JSONObject entity = new JSONObject();
+        entity.put("model", "plane");
+        entity.put("x", x);
+        entity.put("y", y);
+        entity.put("z", z);
+        entity.put("xRotate", 90);
+        entity.put("clickLink", link);
+        entity.put("boundingBoxX", 0.5);
+        entity.put("boundingBoxY", 0.5);
+        entity.put("boundingBoxZ", 0.5);
+        
+        return entity;
+    }
+    
 }
     
