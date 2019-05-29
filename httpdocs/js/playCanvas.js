@@ -17,6 +17,7 @@ setTimeout(loop, loopDelay);
 
 async function getServerData(endpoint)
 {
+    console.log(url+"/"+endpoint);
     let response = await fetch(url+"/"+endpoint);
     
     let data = await response.json();
@@ -106,83 +107,105 @@ async function serverWork()
         }
     }
 
-    if(startData.vr )
-    {
-        if (window.WebVRConfig) WebVRConfig.BUFFER_SCALE = 0.5;
-   
-        app.vr = new pc.VrManager(app);
-        var current = this;
+    
+    if (window.WebVRConfig) WebVRConfig.BUFFER_SCALE = 0.5;
 
-        addEventListener("mousedown",  e => 
-        {
-            if (current.app.vr && current.app.vr.display) {
-                current.app.vr.display.on("presentchange", current._onVrPresentChange, current);
-                if (current.app.vr.display.display.bufferScale_) current.app.vr.display.display.bufferScale_ = 0.5;
+    app.vr = new pc.VrManager(app);
+    var current = this;
+
+    addEventListener("mousedown",  e => 
+    {
+        if (current.app.vr && current.app.vr.display) {
+            current.app.vr.display.on("presentchange", current._onVrPresentChange, current);
+            if (current.app.vr.display.display.bufferScale_) current.app.vr.display.display.bufferScale_ = 0.5;
+        }
+
+        if(!current.app.vr.display) return;
+
+        alert("entering vr");
+        current.camera.camera.camera.enterVr(function (err) {
+            if (err) {
+                var h1 = document.createElement("h1");
+                h1.innerHTML = err;
+                document.body.appendChild(h1);
             }
 
-            if(!current.app.vr.display) return;
-
-            alert("entering vr");
-            current.camera.camera.camera.enterVr(function (err) {
-                if (err) {
-                    var h1 = document.createElement("h1");
-                    h1.innerHTML = err;
-                    document.body.appendChild(h1);
-                }
-
-                else
-                {              
-                    window.addEventListener("gamepadconnected", function(e) {
-                       
-                        var beam = new pc.Entity();
-                        beam.addComponent("model", {
-                            type: "sphere"
-                        });
-                        
-                        current.app.root.addChild(beam);
-                        
-                        var gamePadController = pc.createScript("gamePadController");
-                        gamePadController.prototype.update = function (dt) {            
-                
-                            var gp = current.navigator.getGamepads()[0];           
-
-                            if(gp.pose.hasOrientation)
-                            {
-                                if(gp.pose.orientation)
-                                {
-                                    var pitch = gp.pose.orientation[0];
-                                    var yaw = gp.pose.orientation[1];
-                                    var roll = gp.pose.orientation[2];
-                                    var w = gp.pose.orientation[3];
-
-                                    var rotation = new pc.Quat(pitch, yaw, roll, w);
-
-                                    var v = new pc.Vec3(0, 0, -10);
-
-                                    var controllerVector = rotation.transformVector(v);
-
-                                    beam.setPosition(controllerVector);
-
-                                    if(gp.buttons[0].value > 0 || gp.buttons[0].pressed == true || gp.buttons[1].value > 0 || gp.buttons[1].pressed == true)
-                                    {
-
-                                        //add a parent object to camera and change that for vr
-                                        current.raycast(current.camera.camera.getPosition(), controllerVector.normalise(), current)
-                                    }
-                                }
-
-                            }
-                        };
-                
-                        current.camera.camera.addComponent('script');
-                        current.camera.camera.script.create(gamePadController);  
-                        
+            else
+            {              
+                window.addEventListener("gamepadconnected", function(e) {
+                    
+                    var beam = new pc.Entity();
+                    beam.addComponent("model", {
+                        type: "sphere"
                     });
-                }
-            });
+                    beam.setLocalScale(0.25, 0.25, 0.25);
+                    
+                    current.app.root.addChild(beam);
+                    
+                    var gamePadController = pc.createScript("gamePadController");
+                    gamePadController.prototype.update = function (dt) {            
+            
+                        var gp = current.navigator.getGamepads()[0];           
+
+                        if(gp.pose.hasOrientation)
+                        {
+                            if(gp.pose.orientation)
+                            {
+                                var pitch = gp.pose.orientation[0];
+                                var yaw = gp.pose.orientation[1];
+                                var roll = gp.pose.orientation[2];
+                                var w = gp.pose.orientation[3];
+
+                                var rotation = new pc.Quat(pitch, yaw, roll, w);
+
+                                var v = new pc.Vec3(0, 0, -10);
+                                var v1 = new pc.Vec3(0, 0, -1);
+
+                                var controllerVector = rotation.transformVector(v);
+                                var direction = rotation.transformVector(v1);
+                                controllerVector.add(current.camera.cameraContainer.getPosition());
+
+                                beam.setPosition(controllerVector);
+
+                                if(gp.buttons[0].value > 0 || gp.buttons[0].pressed == true || gp.buttons[1].value > 0 || gp.buttons[1].pressed == true)
+                                {
+                                    //add a parent object to camera and change that for vr
+                                    var result = current.raycast(current.camera.cameraContainer.getPosition(), direction, current);
+
+                                    if(!result) return;
+
+                                    if(result.entity.name == "ground")
+                                    {
+                                        var hitX = result.hit.x;
+                                        var camY = current.camera.y;
+                                        var hitZ = result.hit.z;
+
+                                        current.camera.cameraContainer.setPosition(hitX, camY, hitZ);                    
+                                        return;   
+                                    }
+
+                                    var link = result.entity.clickLink;
+                                    
+                                    if(link)
+                                    {
+                                        window.location.href = '/'+link;
+                                        return;    
+                                    } 
+                                    
+                                }
+                            }
+                        }
+                    };
+            
+                    current.camera.camera.addComponent('script');
+                    current.camera.camera.script.create(gamePadController);  
+                    
+                });
+            }
         });
-        
-    }
+    });
+    
+    
 
     
     var current = this;
@@ -190,14 +213,34 @@ async function serverWork()
     addEventListener("mousedown",  e => {
         canvas.requestPointerLock();
 
-        raycast(current.camera.camera.getPosition(), current.camera.camera.forward, current)
+        var result = raycast(current.camera.cameraContainer.getPosition(), current.camera.camera.forward, current)
+
+        if(!result) return;
+
+        if(result.entity.name == "ground")
+        {
+            var hitX = result.hit.x;
+            var camY = current.camera.y;
+            var hitZ = result.hit.z;
+
+            current.camera.cameraContainer.setPosition(hitX, camY, hitZ);                    
+            return;   
+        }
+
+        var link = result.entity.clickLink;
+        
+        if(link)
+        {
+            window.location.href = '/'+link;
+            return;    
+        } 
     }); 
 }
 
 function raycast(origin, direction, current)
 {
     // Initialise the ray and work out the direction of the ray from the a screen position
-    this.ray = new pc.Ray();
+    this.ray = new pc.Ray();  
 
     current.ray.origin.copy(origin);
     current.ray.direction.copy(direction);
@@ -217,8 +260,8 @@ function raycast(origin, direction, current)
         var aPos = a.Entity.getPosition(); 
         var bPos = b.Entity.getPosition(); 
 
-        var aDiff = aPos.sub(current.camera.camera.getPosition());
-        var bDiff = bPos.sub(current.camera.camera.getPosition());
+        var aDiff = aPos.sub(origin);
+        var bDiff = bPos.sub(origin);
 
         var aDis = Math.abs(aDiff.length());
         var bDis = Math.abs(bDiff.length());
@@ -238,25 +281,12 @@ function raycast(origin, direction, current)
 
         if (result) 
         {
-            if(distancePickables[i].Entity.name == "ground")
-            {
-                var hitX = hit.x;
-                var camY = current.camera.y;
-                var hitZ = hit.z;
+            var output = {
+                entity: distancePickables[i].Entity,
+                hit: hit
+            };
 
-                current.camera.camera.setPosition(hitX, camY, hitZ);                    
-                break;   
-            }
-
-            var link = distancePickables[i].clickLink;
-
-            console.log(link);
-            
-            if(link)
-            {
-                window.location.href = '/'+link;
-                break;    
-            }         
+            return output;        
         }  
     }    
 }

@@ -105,9 +105,7 @@ public class virtualNI extends DynamicWebPage {
             responseData.put("entities", entities);
                     
             responseData.put("time", System.currentTimeMillis()); 
-                        
-            responseData.put("vr", true); 
-            
+                                    
             toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );
             return true;
         }

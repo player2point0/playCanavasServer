@@ -70,9 +70,7 @@ public class brainUI extends DynamicWebPage {
             }  
             
             responseData.put("entities", entities);
-            
-            responseData.put("vr", true); 
-                    
+                                
             responseData.put("time", System.currentTimeMillis()); 
                         
             toProcess.r = new WebResponse( WebResponse.HTTP_OK, WebResponse.MIME_PLAINTEXT, responseData.toString() );

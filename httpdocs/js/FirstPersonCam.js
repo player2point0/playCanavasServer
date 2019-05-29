@@ -15,6 +15,8 @@ class FirstPersonCam{
             clearColor: new pc.Color(0.1, 0.2, 0.3)
         });
 
+        this.cameraContainer = new pc.Entity();
+
         var crosshair = document.createElement("h1");
         crosshair.innerHTML = "+";
         crosshair.style = "position: absolute;"+
@@ -84,14 +86,16 @@ class FirstPersonCam{
                     this.y -= up.y * speed;
                 }
 
-                this.camera.setPosition(this.x, this.y, this.z);
+                this.cameraContainer.setPosition(this.x, this.y, this.z);
                 
                 //console.log("position "+this.camera.position);
             });
         }
 
-        app.root.addChild(this.camera);
-        this.camera.setPosition(this.x, this.y, this.z);
+        this.cameraContainer.addChild(this.camera);
+        app.root.addChild(this.cameraContainer);
+        this.camera.setPosition(0,0,0);
+        this.cameraContainer.setPosition(this.x, this.y, this.z);
     }
 
 }

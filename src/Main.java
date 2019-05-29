@@ -126,7 +126,7 @@ public class Main
 		        //this will mean that a static index.html page will be loaded as default
 		        //the example dynamic page will process the request if the index.html file is not present
 	        	if(toProcess.path.length()==0)
-	        		toProcess.path = "playcanvas";
+	        		toProcess.path = "menu";
 
 	        	
 	        	if(sketchFabPage.process(toProcess)) {

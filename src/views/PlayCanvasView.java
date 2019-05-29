@@ -48,7 +48,7 @@ public class PlayCanvasView extends DynamicWebPage {
         {
             String stringToSendToWebBrowser = "<html>\n" + 
         			"<head>"+
-            			"<script src=\"https://code.playcanvas.com/playcanvas-latest.js\"></script>\n" + 
+    					"<script src=\"./js/playcanvas-latest.js\"></script>\n" + 
             			"<script src=\"./js/JavaEntity.js\"></script>\n" + 
             			"<script src=\"./js/FirstPersonCam.js\"></script>\n" + 
                         "<link href=\"css/stats.css\" rel=\"stylesheet\" type=\"text/css\">" +
@@ -63,7 +63,7 @@ public class PlayCanvasView extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvas/playCanvasStart"))
+        else if(toProcess.path.equalsIgnoreCase("/playCanvasStart"))
         { 	  	
             JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
@@ -76,8 +76,6 @@ public class PlayCanvasView extends DynamicWebPage {
             entity1.put("boundingBoxX", 0.5);
             entity1.put("boundingBoxY", 0.5);
             entity1.put("boundingBoxZ", 0.5);
-            entity1.put("scriptName", "rotate1");
-            entity1.put("script", "this.entity.rotate(0, 10 * dt, 0);");
             
             entities.put(0, entity1);            
             
@@ -89,7 +87,7 @@ public class PlayCanvasView extends DynamicWebPage {
             return true;
         }
         
-        else if(toProcess.path.equalsIgnoreCase("playCanvas/playCanvasUpdate"))
+        else if(toProcess.path.equalsIgnoreCase("/playCanvasUpdate"))
         {  	
         	JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
