@@ -52,7 +52,6 @@ function boilerPlate()
     // Create camera entity
     camera = new FirstPersonCam(0, 5, 0, 0, 0, 0, false, app);
 
-
     var topLight = new pc.Entity();
     topLight.addComponent('light', {
         type: "point",
@@ -64,7 +63,6 @@ function boilerPlate()
     topLight.setEulerAngles(4, 5, 6);
     topLight.setPosition(0, 10, 0);
     app.root.addChild(topLight);
-   
 
     var frontLight = new pc.Entity();
     frontLight.addComponent('light', {
@@ -77,7 +75,6 @@ function boilerPlate()
     frontLight.setEulerAngles(45, 0, 0);
     frontLight.setPosition(0, 10, 10);
     app.root.addChild(frontLight);
-
 
     // Add to hierarchy
     // Set up initial positions and orientations
