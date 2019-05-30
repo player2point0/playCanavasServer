@@ -12,11 +12,14 @@ class FirstPersonCam{
         
         this.camera = new pc.Entity();
         this.camera.addComponent('camera', {
-            clearColor: new pc.Color(0.1, 0.2, 0.3)
+            clearColor: new pc.Color(0.1, 0.2, 0.3)//background color
         });
 
+        //storing the camera in a container and moving the container instead
+        //allows you to move the camera when in vr
         this.cameraContainer = new pc.Entity();
 
+        //draws crosshair on dom/canvas
         var crosshair = document.createElement("h1");
         crosshair.innerHTML = "+";
         crosshair.style = "position: absolute;"+
@@ -37,7 +40,6 @@ class FirstPersonCam{
 
                 this.camera.eulerAngles.x = this.camera.eulerAngles.x - speed * e.movementY;
                 this.camera.eulerAngles.y = this.camera.eulerAngles.y - speed * e.movementX;
-
                 this.camera.setEulerAngles(this.camera.eulerAngles.x, this.camera.eulerAngles.y, 0);
 
                 //console.log("rotation "+this.camera.eulerAngles);
@@ -45,11 +47,8 @@ class FirstPersonCam{
         });
             
         if(activated)
-        {
-            addEventListener("mousedown",  e => {
-                canvas.requestPointerLock()
-            });   
-
+        {  
+            //move camera using the standard keys
             addEventListener("keypress", e => {
                 
                 var speed = 1;
@@ -97,5 +96,4 @@ class FirstPersonCam{
         this.camera.setPosition(0,0,0);
         this.cameraContainer.setPosition(this.x, this.y, this.z);
     }
-
 }

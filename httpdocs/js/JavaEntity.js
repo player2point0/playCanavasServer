@@ -1,7 +1,7 @@
 class JavaEntity
 {
-    constructor(entityData, app, sceneEntity) {
-        
+    constructor(entityData, app, sceneEntity) 
+    {    
         this.app = app;
         this.Entity = new pc.Entity();
         this.x = 0;
@@ -15,13 +15,14 @@ class JavaEntity
         this.zScale = 1;
         this.textureURL = "";
 
+        //the model type e.g box, sphere or asset for custom
         if(entityData.model)
         {
             this.Entity.addComponent('model', {
                 type: entityData.model
             });
         }
-
+        //the vertex, uvs, and indices for custom meshes
         if(entityData.vertexData)
         {
             this.node = new pc.GraphNode();
@@ -42,27 +43,26 @@ class JavaEntity
             model.meshInstances.push(meshInstance);
             this.Entity.model.model = model;
         }
-
+        //name of the entity
         if(entityData.name)
         {
             this.Entity.name = entityData.name;
         }
-
+        //position of the entity
         if(entityData.x) this.x = entityData.x;
         if(entityData.y) this.y = entityData.y;
         if(entityData.z) this.z = entityData.z;
         this.Entity.setPosition(this.x, this.y, this.z);
-
+        //rotation of the entity
         if(entityData.xRotate) this.xRotate = entityData.xRotate;
         if(entityData.yRotate) this.yRotate = entityData.yRotate;
         if(entityData.zRotate) this.zRotate = entityData.zRotate;
         this.Entity.setEulerAngles(this.xRotate, this.yRotate, this.zRotate);
-
+        //scale/size of the entity
         if(entityData.xScale) this.xScale = entityData.xScale;
         if(entityData.yScale) this.yScale = entityData.yScale;
         if(entityData.zScale) this.zScale = entityData.zScale;
         this.Entity.setLocalScale(this.xScale, this.yScale, this.zScale);
-
         //bounding box for raycasting
         if(entityData.boundingBoxX && entityData.boundingBoxY && entityData.boundingBoxZ)
         {
@@ -73,14 +73,13 @@ class JavaEntity
             this._min = new pc.Vec3;
             this._max = new pc.Vec3;
         }
-
         //the page on the server that the client will redirect to when clicked on
         if(entityData.clickLink)
         {
             this.clickLink = entityData.clickLink;
         }
-
         //script attatched to the playcanvas entity
+        //currently not used
         if(entityData.script)
         {
             var scriptName = "default"; 
@@ -90,6 +89,7 @@ class JavaEntity
                 scriptName = entityData.scriptName;
             }
             
+            //could add other types of scripts e.g. initialise, swap
             var tempScript = pc.createScript(scriptName);
             tempScript.prototype.update = function (dt) {
                 eval(entityData.script);
@@ -98,15 +98,18 @@ class JavaEntity
             this.Entity.addComponent('script');
             this.Entity.script.create(tempScript);            
         }
-
         //used for realtime streaming from a url
+        //currently not used
         if(entityData.textureURL)
         {
             this.textureURL = entityData.textureURL;
         }
-
+        //the texture that is displayed on the material
+        //encoded as a base64 string
+        //supports transparent textures
         if(entityData.texture)
         {   
+            //from example code
             this.texture = new pc.Texture( this.app.graphicsDevice);
 
             this.texture.minFilter = pc.FILTER_LINEAR;
@@ -122,17 +125,18 @@ class JavaEntity
             };
 
             this.Entity.model.model.meshInstances[0].material.diffuseMap = this.texture;
+            //enables transparent textures
             this.Entity.model.model.meshInstances[0].material.opacityMap = this.texture;
-            
             this.Entity.model.model.meshInstances[0].material.blendType = pc.BLEND_NORMAL;
-            
+            //updates the texture
             this.Entity.model.model.meshInstances[0].material.update();   
         }        
-
+        //the folder where the sketch fab file is stored
+        //for the sketch fab scraper
         if(entityData.sketchFabFolder)
         {
             var current = this;
-
+            //from example code
             app.assets.loadFromUrl('./sketchFab/'+entityData.sketchFabFolder+'/scene.gltf', 'json', function (err, asset) {
             
                 var json = asset.resource;
@@ -146,11 +150,9 @@ class JavaEntity
             });
         }
 
-
-        // Add to hierarchy
+        //add to current scene entity
         sceneEntity.addChild(this.Entity);
     }
-
     updateEntity(entityData)
     {
         if(entityData.vertexData)
@@ -178,7 +180,6 @@ class JavaEntity
             this.changeTexture(entityData.texture);   
         }
     }
-
     changeMesh(vertexData)
     {
         //remove the previous graphic buffers from the graphics device
@@ -194,11 +195,7 @@ class JavaEntity
         });
 
         this.Entity.model.model.meshInstances[0].mesh = this.mesh;
- 
-        //console.log(this.Entity.model.model.meshInstances[0].mesh);
-        //console.log(this.app.graphicsDevice.buffers);
     }
-
     changeTexture(texture)
     {
         if(texture)
@@ -214,8 +211,9 @@ class JavaEntity
             this.Entity.model.model.meshInstances[0].material.update();             
         }
     }
-
     //untested
+    //lerp a mesh from one position to another
+    //as an animation to reduce server calls
     morphMesh(finalVertetxMesh, steps)
     {
         var tempVertex = this.vertexPos;
@@ -245,7 +243,9 @@ class JavaEntity
             changeMesh(tempVertexData);
         }
     }
-
+    //loads an image from a url
+    //encodes as a base64 string and display on texture
+    //not used
     async getTextureFromURL(url)
     {
         var url = "http://169.254.100.32:8080/captureKinectImage";
@@ -268,5 +268,4 @@ class JavaEntity
           return window.btoa(binary);
         };
     }
-
 }
