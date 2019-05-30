@@ -39,7 +39,7 @@ function boilerPlate()
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     // Create camera entity
-    camera = new FirstPersonCam(0, 5, 0, 0, 0, 0, false, app);
+    camera = new FirstPersonCam(0, 8, 0, 0, 0, 0, false, app);
 
     //create lights
     var topLight = new pc.Entity();
@@ -94,7 +94,13 @@ function vrBoilerPlate()
                 }
 
                 else
-                {              
+                {     
+                    //move the camera container down so the camera appears to be in the same place
+                    var camX = current.camera.cameraContainer.getPosition().x;
+                    var camZ = current.camera.cameraContainer.getPosition().z; 
+                    var camY = current.camera.cameraContainer.getPosition().y; 
+                    current.camera.cameraContainer.setPosition(camX, camY - 1.5, camZ);                    
+                    
                     window.addEventListener("gamepadconnected", function(e) {
             
                         //the vr reticle

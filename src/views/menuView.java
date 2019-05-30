@@ -51,19 +51,21 @@ public class menuView extends DynamicWebPage {
             String virtualniIcon = "./img/Virtual NI.png";
             String virtualniStatsIcon = "./img/Virtual NI stats.png";   
             
-            JSONObject topLeft = menuTile(-1.5, 6.5, -5, "scenedetect", sceneDetectIcon);
+            double yHeight = 8;
+            
+            JSONObject topLeft = menuTile(-1.5, (yHeight + 1.5), -5, "scenedetect", sceneDetectIcon);
             entities.put(0, topLeft);
-            JSONObject top = menuTile(0, 6.5, -5, "bodydetect", bodyDetectIcon);
+            JSONObject top = menuTile(0, (yHeight + 1.5), -5, "bodydetect", bodyDetectIcon);
             entities.put(1, top);
-            JSONObject topRight = menuTile(1.5, 6.5, -5, "facedetect", faceDetectIcon);
+            JSONObject topRight = menuTile(1.5, (yHeight + 1.5), -5, "facedetect", faceDetectIcon);
             entities.put(2, topRight);
-            JSONObject centerLeft = menuTile(-1.5, 5, -5, "voicedetect", voiceDetectIcon);
+            JSONObject centerLeft = menuTile(-1.5, yHeight, -5, "voicedetect", voiceDetectIcon);
             entities.put(3, centerLeft);
-            JSONObject center = menuTile(0, 5, -5, "auto", autoIcon);
+            JSONObject center = menuTile(0, yHeight, -5, "auto", autoIcon);
             entities.put(4, center);
-            JSONObject centerRight = menuTile(1.5, 5, -5, "virtualni", virtualniIcon);
+            JSONObject centerRight = menuTile(1.5, yHeight, -5, "virtualni", virtualniIcon);
             entities.put(5, centerRight);
-            JSONObject bottomLeft = menuTile(-1.5, 3.5, -5, "virtualnistats", virtualniStatsIcon);
+            JSONObject bottomLeft = menuTile(-1.5, (yHeight - 1.5), -5, "virtualnistats", virtualniStatsIcon);
             entities.put(6, bottomLeft);
             
             responseData.put("entities", entities);
