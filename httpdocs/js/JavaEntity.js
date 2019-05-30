@@ -21,6 +21,7 @@ class JavaEntity
             this.Entity.addComponent('model', {
                 type: entityData.model
             });
+            this.Entity.model.model.meshInstances[0].material = new pc.StandardMaterial();
         }
         //the vertex, uvs, and indices for custom meshes
         if(entityData.vertexData)
@@ -134,6 +135,23 @@ class JavaEntity
         //the folder where the sketch fab file is stored
         //for the sketch fab scraper
         if(entityData.sketchFabFolder)
+        {
+            var current = this;
+            //from example code
+            app.assets.loadFromUrl('./sketchFab/'+entityData.sketchFabFolder+'/scene.gltf', 'json', function (err, asset) {
+            
+                var json = asset.resource;
+                var gltf = JSON.parse(json);
+
+                loadGltf(gltf, app.graphicsDevice, function (model, textures, animationClips) {
+                    current.Entity.model.model = model;
+                }, {
+                    basePath: './sketchFab/'+entityData.sketchFabFolder+'/'//path for textures and bin
+                });
+            });
+        }
+        //
+        if(entityData.imgFilePath)
         {
             var current = this;
             //from example code

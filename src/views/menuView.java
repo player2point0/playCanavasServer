@@ -43,13 +43,13 @@ public class menuView extends DynamicWebPage {
             JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
             
-            String sceneDetectIcon = "";
-            String bodyDetectIcon = "";
-            String faceDetectIcon = "";
-            String voiceDetectIcon = "";
-            String autoIcon = "";
-            String virtualniIcon = "";
-            String virtualniStatsIcon = "";   
+            String sceneDetectIcon = "./img/Scene Detect.png";
+            String bodyDetectIcon = "./img/Body Detect.png";
+            String faceDetectIcon = "./img/Face Detect.png";
+            String voiceDetectIcon = "./img/Voice Detect.png";
+            String autoIcon = "./img/AUTO.png";
+            String virtualniIcon = "./img/Virtual NI.png";
+            String virtualniStatsIcon = "./img/Virtual NI stats.png";   
             
             JSONObject topLeft = menuTile(-1.5, 6.5, -5, "scenedetect", sceneDetectIcon);
             entities.put(0, topLeft);
