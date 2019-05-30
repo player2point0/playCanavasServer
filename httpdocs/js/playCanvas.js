@@ -2,23 +2,34 @@ var canvas;
 var app;
 var camera;
 var vr;
-const url = window.location.href //"http://169.254.100.33:8080/";//"http://localhost:8080/";
+const host = window.location.hostname; //"http://169.254.100.33:8080/";//"http://localhost:8080/";
+const port = window.location.port;
+var currentPage = window.location.pathname;
 const loopDelay = 100;//takes about 15 for server response
+var sceneEntity;
 var entities = [];
 var realtimeEntities = [];
 
-var lastTime = Date.now();
-var total = 0;
-var count = 0;
+var lastVRButton = Date.now();
 
 boilerPlate();
 serverWork();
+vrBoilerPlate();
 setTimeout(loop, loopDelay);
+
+function changeScene(newPage)
+{
+    //clear current scene
+    sceneEntity.destroy();
+    currentPage = "/"+newPage;
+    serverWork();
+}
+
 
 async function getServerData(endpoint)
 {
-    console.log(url+"/"+endpoint);
-    let response = await fetch(url+"/"+endpoint);
+    var url1 = "http://"+host+":"+port+currentPage+"/"+endpoint;
+    let response = await fetch(url1);
     
     let data = await response.json();
 
@@ -81,33 +92,8 @@ function boilerPlate()
     });
 }
 
-
-async function serverWork()
+function vrBoilerPlate()
 {
-    var startData = await getServerData("playCanvasStart");
-  
-    var serverEntities = startData.entities;    
-
-    for(var i = 0;i<serverEntities.length;i++)
-    {
-        var entity = serverEntities[i];
-        var newEntity = new JavaEntity(entity, app); 
-
-        if((entity.name != undefined) && (newEntity.Entity.name == "Untitled")) 
-        {
-            //bug fix for first entity
-            newEntity.Entity.name = entity.name;
-        }
-
-        entities.push(newEntity);
-
-        if(entity.realtimeModel)
-        {
-            realtimeEntities.push(newEntity);
-        }
-    }
-
-    
     if (window.WebVRConfig) WebVRConfig.BUFFER_SCALE = 0.5;
 
     app.vr = new pc.VrManager(app);
@@ -163,18 +149,21 @@ async function serverWork()
 
                                 var controllerVector = rotation.transformVector(v);
                                 var direction = rotation.transformVector(v1);
-                                controllerVector.add(current.camera.cameraContainer.getPosition());
+                                controllerVector.add(current.camera.camera.getPosition());
 
                                 beam.setPosition(controllerVector);
 
+                                //add better delay between button presses - detect button up
+                                if((current.lastVRButton + 200) > Date.now()) return;
+
                                 if(gp.buttons[0].value > 0 || gp.buttons[0].pressed == true || gp.buttons[1].value > 0 || gp.buttons[1].pressed == true)
                                 {
-                                    //add a parent object to camera and change that for vr
-                                    var result = current.raycast(current.camera.cameraContainer.getPosition(), direction, current);
+                                    current.lastVRButton = Date.now();
+                                    var result = current.raycast(current.camera.camera.getPosition(), direction, current);
 
                                     if(!result) return;
 
-                                    if(result.entity.name == "ground")
+                                    if(result.obj.Entity.name == "ground")
                                     {
                                         var hitX = result.hit.x;
                                         var camY = current.camera.y;
@@ -184,14 +173,13 @@ async function serverWork()
                                         return;   
                                     }
 
-                                    var link = result.entity.clickLink;
+                                    var link = result.obj.clickLink;
                                     
                                     if(link)
                                     {
-                                        window.location.href = '/'+link;
+                                        changeScene(link);
                                         return;    
                                     } 
-                                    
                                 }
                             }
                         }
@@ -199,15 +187,12 @@ async function serverWork()
             
                     current.camera.camera.addComponent('script');
                     current.camera.camera.script.create(gamePadController);  
-                    
                 });
             }
         });
     });
     
-    
-
-    
+     
     var current = this;
 
     addEventListener("mousedown",  e => {
@@ -217,7 +202,7 @@ async function serverWork()
 
         if(!result) return;
 
-        if(result.entity.name == "ground")
+        if(result.obj.Entity.name == "ground")
         {
             var hitX = result.hit.x;
             var camY = current.camera.y;
@@ -227,14 +212,43 @@ async function serverWork()
             return;   
         }
 
-        var link = result.entity.clickLink;
+        var link = result.obj.clickLink;
         
         if(link)
         {
-            window.location.href = '/'+link;
+            changeScene(link);
             return;    
         } 
-    }); 
+    });
+}
+
+async function serverWork()
+{
+    var startData = await getServerData("playCanvasStart");
+    sceneEntity = new pc.Entity();
+
+    var serverEntities = startData.entities;    
+
+    for(var i = 0;i<serverEntities.length;i++)
+    {
+        var entity = serverEntities[i];
+        var newEntity = new JavaEntity(entity, app, sceneEntity); 
+
+        if((entity.name != undefined) && (newEntity.Entity.name == "Untitled")) 
+        {
+            //bug fix for first entity
+            newEntity.Entity.name = entity.name;
+        }
+
+        entities.push(newEntity);
+
+        if(entity.realtimeModel)
+        {
+            realtimeEntities.push(newEntity);
+        }
+    }
+
+    this.app.root.addChild(sceneEntity);
 }
 
 function raycast(origin, direction, current)
@@ -282,7 +296,7 @@ function raycast(origin, direction, current)
         if (result) 
         {
             var output = {
-                entity: distancePickables[i].Entity,
+                obj: distancePickables[i],
                 hit: hit
             };
 
@@ -293,15 +307,6 @@ function raycast(origin, direction, current)
 
 async function loop()
 {
-    //console.log(app.stats.frame);
-    /*
-    var endTime = Date.now(); 
-    total += endTime - lastTime;
-    count++;
-    console.log(total / count);
-
-    lastTime = endTime;
-    */
     var loopData = await getServerData("playCanvasUpdate");
     var loopEntities = loopData.entities;
 

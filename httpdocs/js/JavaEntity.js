@@ -1,7 +1,7 @@
 class JavaEntity
 {
 
-    constructor(entityData, app) {
+    constructor(entityData, app, sceneEntity) {
         
         this.app = app;
         this.Entity = new pc.Entity();
@@ -146,7 +146,7 @@ class JavaEntity
 
 
         // Add to hierarchy
-        this.app.root.addChild(this.Entity);
+        sceneEntity.addChild(this.Entity);
     }
 
     updateEntity(entityData)
