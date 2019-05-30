@@ -106,7 +106,8 @@ class JavaEntity
             this.textureURL = entityData.textureURL;
         }
         //the texture that is displayed on the material
-        //encoded as a base64 string
+        //supports loading images from file
+        //supports base64 string
         //supports transparent textures
         if(entityData.texture)
         {   
@@ -135,23 +136,6 @@ class JavaEntity
         //the folder where the sketch fab file is stored
         //for the sketch fab scraper
         if(entityData.sketchFabFolder)
-        {
-            var current = this;
-            //from example code
-            app.assets.loadFromUrl('./sketchFab/'+entityData.sketchFabFolder+'/scene.gltf', 'json', function (err, asset) {
-            
-                var json = asset.resource;
-                var gltf = JSON.parse(json);
-
-                loadGltf(gltf, app.graphicsDevice, function (model, textures, animationClips) {
-                    current.Entity.model.model = model;
-                }, {
-                    basePath: './sketchFab/'+entityData.sketchFabFolder+'/'//path for textures and bin
-                });
-            });
-        }
-        //
-        if(entityData.imgFilePath)
         {
             var current = this;
             //from example code
