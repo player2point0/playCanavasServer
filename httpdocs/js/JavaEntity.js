@@ -1,6 +1,5 @@
 class JavaEntity
 {
-
     constructor(entityData, app, sceneEntity) {
         
         this.app = app;
@@ -64,7 +63,7 @@ class JavaEntity
         if(entityData.zScale) this.zScale = entityData.zScale;
         this.Entity.setLocalScale(this.xScale, this.yScale, this.zScale);
 
-        //for raycasting
+        //bounding box for raycasting
         if(entityData.boundingBoxX && entityData.boundingBoxY && entityData.boundingBoxZ)
         {
             //	Half the distance across the box in each axis
@@ -75,11 +74,13 @@ class JavaEntity
             this._max = new pc.Vec3;
         }
 
+        //the page on the server that the client will redirect to when clicked on
         if(entityData.clickLink)
         {
             this.clickLink = entityData.clickLink;
         }
 
+        //script attatched to the playcanvas entity
         if(entityData.script)
         {
             var scriptName = "default"; 
@@ -98,6 +99,7 @@ class JavaEntity
             this.Entity.script.create(tempScript);            
         }
 
+        //used for realtime streaming from a url
         if(entityData.textureURL)
         {
             this.textureURL = entityData.textureURL;

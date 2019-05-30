@@ -25,7 +25,6 @@ function changeScene(newPage)
     serverWork();
 }
 
-
 async function getServerData(endpoint)
 {
     var url1 = "http://"+host+":"+port+currentPage+"/"+endpoint;
@@ -51,27 +50,34 @@ function boilerPlate()
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     // Create camera entity
-    camera = new FirstPersonCam(0, 5, 30, 0, 0, 0, false, app);
+    camera = new FirstPersonCam(0, 5, 0, 0, 0, 0, false, app);
 
-    // Create directional light entity
-    var mainLight = new pc.Entity();
-    mainLight.addComponent('light', {
-        type: "directional",
-        color: new pc.Color(0.6, 0.6, 0.6),
+
+    var topLight = new pc.Entity();
+    topLight.addComponent('light', {
+        type: "point",
+        color: new pc.Color(1, 1, 1),
+        intensity: 0.4,
+        range: 1000,
+        castShadows: false,
     });    
-    mainLight.setEulerAngles(45, 0, 0);
-    mainLight.setPosition(0, 0, 30);
-    app.root.addChild(mainLight);
+    topLight.setEulerAngles(4, 5, 6);
+    topLight.setPosition(0, 10, 0);
+    app.root.addChild(topLight);
+   
 
-    var sideLight = new pc.Entity();
-    sideLight.addComponent('light', {
+    var frontLight = new pc.Entity();
+    frontLight.addComponent('light', {
         type: "directional",
-        color: new pc.Color(0.4, 0.4, 0.4),
-    });
-    sideLight.setEulerAngles(-10, -50, 0);
-    sideLight.setPosition(-25, 10, 30);
-    app.root.addChild(sideLight);
-    
+        color: new pc.Color(1, 1, 1),
+        intensity: 0.4,
+        range: 100,
+        castShadows: false,
+    });    
+    frontLight.setEulerAngles(45, 0, 0);
+    frontLight.setPosition(0, 10, 10);
+    app.root.addChild(frontLight);
+
 
     // Add to hierarchy
     // Set up initial positions and orientations
@@ -79,12 +85,6 @@ function boilerPlate()
     light.setPosition(0, -30, 10);
     light.setEulerAngles(60, 0, 0);
     */
-    
-    //pbr
-    app.scene.defaultMaterial.useMetalness = true;
-    
-    app.scene.defaultMaterial.metalness = 0;
-    app.scene.defaultMaterial.shininess = 100;
     
     // Resize the canvas when the window is resized
     window.addEventListener('resize', function () {
@@ -124,7 +124,7 @@ function vrBoilerPlate()
                     beam.addComponent("model", {
                         type: "sphere"
                     });
-                    beam.setLocalScale(0.25, 0.25, 0.25);
+                    beam.setLocalScale(0.1, 0.1, 0.1);
                     
                     current.app.root.addChild(beam);
                     
@@ -144,11 +144,10 @@ function vrBoilerPlate()
 
                                 var rotation = new pc.Quat(pitch, yaw, roll, w);
 
-                                var v = new pc.Vec3(0, 0, -10);
-                                var v1 = new pc.Vec3(0, 0, -1);
+                                var v = new pc.Vec3(0, 0, -1);
 
                                 var controllerVector = rotation.transformVector(v);
-                                var direction = rotation.transformVector(v1);
+                                var direction = rotation.transformVector(v);
                                 controllerVector.add(current.camera.camera.getPosition());
 
                                 beam.setPosition(controllerVector);
@@ -196,7 +195,12 @@ function vrBoilerPlate()
     var current = this;
 
     addEventListener("mousedown",  e => {
+
+        var pointerLockElement = document.pointerLockElement;
+
         canvas.requestPointerLock();
+
+        if(pointerLockElement == null) return;
 
         var result = raycast(current.camera.cameraContainer.getPosition(), current.camera.camera.forward, current)
 

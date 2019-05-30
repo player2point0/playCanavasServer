@@ -43,20 +43,19 @@ public class menuView extends DynamicWebPage {
             JSONObject responseData = new JSONObject();
             JSONArray entities = new JSONArray();
             
-            
-            JSONObject topLeft = menuTile(-1, 1, 0, "scenedetect");
+            JSONObject topLeft = menuTile(-1.5, 6.5, -5, "scenedetect", "");
             entities.put(0, topLeft);
-            JSONObject top = menuTile(0, 1, 0, "bodydetect");
+            JSONObject top = menuTile(0, 6.5, -5, "bodydetect", "");
             entities.put(1, top);
-            JSONObject topRight = menuTile(1, 1, 0, "facedetect");
+            JSONObject topRight = menuTile(1.5, 6.5, -5, "facedetect", "");
             entities.put(2, topRight);
-            JSONObject centerLeft = menuTile(-1, 0, 0, "voicedetect");
+            JSONObject centerLeft = menuTile(-1.5, 5, -5, "voicedetect", "");
             entities.put(3, centerLeft);
-            JSONObject center = menuTile(0, 0, 0, "auto");
+            JSONObject center = menuTile(0, 5, -5, "auto", "");
             entities.put(4, center);
-            JSONObject centerRight = menuTile(3, 0, 0, "virtualni");
+            JSONObject centerRight = menuTile(1.5, 5, -5, "virtualni", "");
             entities.put(5, centerRight);
-            JSONObject bottomLeft = menuTile(-1, -1, 0, "virtualnistats");
+            JSONObject bottomLeft = menuTile(-1.5, 3.5, -5, "virtualnistats", "");
             entities.put(6, bottomLeft);
             
             responseData.put("entities", entities);
@@ -84,7 +83,7 @@ public class menuView extends DynamicWebPage {
     }
     
     
-    public JSONObject menuTile(double x, double y, double z, String link)
+    public JSONObject menuTile(double x, double y, double z, String link, String texture)
     {
         JSONObject entity = new JSONObject();
         entity.put("model", "plane");
@@ -96,6 +95,7 @@ public class menuView extends DynamicWebPage {
         entity.put("boundingBoxX", 0.5);
         entity.put("boundingBoxY", 0.5);
         entity.put("boundingBoxZ", 0.5);
+        entity.put("texture", texture);
         
         return entity;
     }
