@@ -81,8 +81,6 @@ function vrBoilerPlate()
 
     addEventListener("mousedown",  e => 
     {
-        var raycastResult;
-
         //mouse down for vr
         if(current.app.vr.display)
         {
@@ -138,7 +136,28 @@ function vrBoilerPlate()
                                     if(gp.buttons[0].value > 0 || gp.buttons[0].pressed == true || gp.buttons[1].value > 0 || gp.buttons[1].pressed == true)
                                     {
                                         current.lastVRButton = Date.now();
-                                        raycastResult = current.raycast(current.camera.camera.getPosition(), direction, current);//was an object hit
+                                        var raycastResult = current.raycast(current.camera.camera.getPosition(), direction, current);//was an object hit
+
+                                        if(!raycastResult) return;
+
+                                        //teleport player to position on ground
+                                        if(raycastResult.obj.Entity.name == "ground")
+                                        {
+                                            var hitX = raycastResult.hit.x;
+                                            var camY = current.camera.y;
+                                            var hitZ = raycastResult.hit.z;
+                                
+                                            current.camera.cameraContainer.setPosition(hitX, camY, hitZ);                    
+                                            return;   
+                                        }
+                                
+                                        var link = raycastResult.obj.clickLink;
+                                        //redirect to new scene/page on server
+                                        if(link)
+                                        {
+                                            changeScene(link);
+                                            return;    
+                                        } 
                                     }
                                 }
                             }
@@ -161,30 +180,29 @@ function vrBoilerPlate()
             canvas.requestPointerLock();
             if(pointerLockElement == null) return;
     
-            raycastResult = raycast(current.camera.cameraContainer.getPosition(), current.camera.camera.forward, current)
-        }
+            var raycastResult = raycast(current.camera.cameraContainer.getPosition(), current.camera.camera.forward, current);
 
+            if(!raycastResult) return;
 
-        if(!raycastResult) return;
+            //teleport player to position on ground
+            if(raycastResult.obj.Entity.name == "ground")
+            {
+                var hitX = raycastResult.hit.x;
+                var camY = current.camera.y;
+                var hitZ = raycastResult.hit.z;
 
-        //teleport player to position on ground
-        if(raycastResult.obj.Entity.name == "ground")
-        {
-            var hitX = raycastResult.hit.x;
-            var camY = current.camera.y;
-            var hitZ = raycastResult.hit.z;
+                current.camera.cameraContainer.setPosition(hitX, camY, hitZ);                    
+                return;   
+            }
 
-            current.camera.cameraContainer.setPosition(hitX, camY, hitZ);                    
-            return;   
-        }
-
-        var link = raycastResult.obj.clickLink;
-        //redirect to new scene/page on server
-        if(link)
-        {
-            changeScene(link);
-            return;    
-        } 
+            var link = raycastResult.obj.clickLink;
+            //redirect to new scene/page on server
+            if(link)
+            {
+                changeScene(link);
+                return;    
+            } 
+        }    
     });
 }
 
