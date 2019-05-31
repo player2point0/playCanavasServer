@@ -39,7 +39,7 @@ function boilerPlate()
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     // Create camera entity
-    camera = new FirstPersonCam(0, 8, 0, 0, 0, 0, false, app);
+    camera = new FirstPersonCam(0, 8, 0, 0, 0, 0, false, false, app);
 
     //create lights
     var topLight = new pc.Entity();

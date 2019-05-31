@@ -27,8 +27,8 @@ public class menuView extends DynamicWebPage {
                         "<link href=\"css/stats.css\" rel=\"stylesheet\" type=\"text/css\">" +
             		"</head>"+
             		"<body>\n" + 
-                    "<canvas id=\"application-canvas\"></canvas>\n" + 
-            		"<script src=\"js/playCanvas.js\"></script>\n"+
+	                    "<canvas id=\"application-canvas\"></canvas>\n" + 
+	            		"<script src=\"js/playCanvas.js\"></script>\n"+
             		"  </body>\n" + 
             		"</html>";
 
