@@ -108,7 +108,7 @@ function vrBoilerPlate()
                         reticle.addComponent("model", {
                             type: "sphere"
                         });
-                        reticle.setLocalScale(0.1, 0.1, 0.1);       
+                        reticle.setLocalScale(0.075, 0.075, 0.075);       
                         current.app.root.addChild(reticle);
                         
                         //add to camera so that it is called every frame
@@ -116,55 +116,52 @@ function vrBoilerPlate()
                         gamePadController.prototype.update = function (dt) {            
                 
                             var gp = current.navigator.getGamepads()[0];           
-
-                            if(gp.pose.hasOrientation)
+              
+                            if(gp.pose.orientation)
                             {
-                                if(gp.pose.orientation)
+                                var pitch = gp.pose.orientation[0];
+                                var yaw = gp.pose.orientation[1];
+                                var roll = gp.pose.orientation[2];
+                                var w = gp.pose.orientation[3];
+
+                                var rotation = new pc.Quat(pitch, yaw, roll, w);//vr controller rotation
+                                var v = new pc.Vec3(0, 0, -1);//forward vector
+
+                                var controllerVector = rotation.transformVector(v);//vector to place the reticle at
+                                var direction = rotation.transformVector(v);//direction vector of the vr controller
+                                controllerVector.add(current.camera.camera.getPosition());//position reticle relative to camera position
+                                reticle.setPosition(controllerVector);
+
+                                //could add better delay between button presses - detect button up
+                                //prevents button spamming by forcing a 200ms delay between raycasts
+                                if((current.lastVRButton + 200) > Date.now()) return;
+                                
+                                //checks if trigger pressed or touchpad pressed
+                                if(gp.buttons[0].value > 0 || gp.buttons[0].pressed == true || gp.buttons[1].value > 0 || gp.buttons[1].pressed == true)
                                 {
-                                    var pitch = gp.pose.orientation[0];
-                                    var yaw = gp.pose.orientation[1];
-                                    var roll = gp.pose.orientation[2];
-                                    var w = gp.pose.orientation[3];
+                                    current.lastVRButton = Date.now();
+                                    var raycastResult = current.raycast(current.camera.camera.getPosition(), direction, current);//was an object hit
 
-                                    var rotation = new pc.Quat(pitch, yaw, roll, w);//vr controller rotation
-                                    var v = new pc.Vec3(0, 0, -1);//forward vector
+                                    if(!raycastResult) return;
 
-                                    var controllerVector = rotation.transformVector(v);//vector to place the reticle at
-                                    var direction = rotation.transformVector(v);//direction vector of the vr controller
-                                    controllerVector.add(current.camera.camera.getPosition());//position reticle relative to camera position
-                                    reticle.setPosition(controllerVector);
-
-                                    //could add better delay between button presses - detect button up
-                                    //prevents button spamming by forcing a 200ms delay between raycasts
-                                    if((current.lastVRButton + 200) > Date.now()) return;
-                                    
-                                    //checks if trigger pressed or touchpad pressed
-                                    if(gp.buttons[0].value > 0 || gp.buttons[0].pressed == true || gp.buttons[1].value > 0 || gp.buttons[1].pressed == true)
+                                    //teleport player to position on ground
+                                    if(raycastResult.obj.Entity.name == "ground")
                                     {
-                                        current.lastVRButton = Date.now();
-                                        var raycastResult = current.raycast(current.camera.camera.getPosition(), direction, current);//was an object hit
-
-                                        if(!raycastResult) return;
-
-                                        //teleport player to position on ground
-                                        if(raycastResult.obj.Entity.name == "ground")
-                                        {
-                                            var hitX = raycastResult.hit.x;
-                                            var camY = current.camera.y;
-                                            var hitZ = raycastResult.hit.z;
-                                
-                                            current.camera.cameraContainer.setPosition(hitX, camY, hitZ);                    
-                                            return;   
-                                        }
-                                
-                                        var link = raycastResult.obj.clickLink;
-                                        //redirect to new scene/page on server
-                                        if(link)
-                                        {
-                                            changeScene(link);
-                                            return;    
-                                        } 
+                                        var hitX = raycastResult.hit.x;
+                                        var camY = current.camera.y;
+                                        var hitZ = raycastResult.hit.z;
+                            
+                                        current.camera.cameraContainer.setPosition(hitX, camY, hitZ);                    
+                                        return;   
                                     }
+                            
+                                    var link = raycastResult.obj.clickLink;
+                                    //redirect to new scene/page on server
+                                    if(link)
+                                    {
+                                        changeScene(link);
+                                        return;    
+                                    } 
                                 }
                             }
                         };
@@ -301,6 +298,9 @@ function changeScene(newPage)
 {
     //clear current scene
     sceneEntity.destroy();
+    //remove entities
+    entities = [];
+    realtimeEntities = [];
     //change server page to new page 
     currentPage = "/"+newPage;
     //reinitialise the scene

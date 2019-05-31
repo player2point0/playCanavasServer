@@ -9,9 +9,7 @@ import web.WebRequest;
 import web.WebResponse;
 
 public class menuView extends DynamicWebPage {
-	
-	private double offset = 0;
-	
+		
     public menuView(DatabaseInterface db, FileStoreInterface fs) {
 		super(db, fs);
 		// TODO Auto-generated constructor stub
