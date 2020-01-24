@@ -1,0 +1,39 @@
+--Play Canvas--
+TLDR: Rendering of 3d models from a server in a web browser and in VR
+Date Started: May 6, 2019
+Date Finished: May 31, 2019
+Main Use: Rendering of the AI chatbot mockup in VR
+Goal Use: Rendering the AI chatbot UI in VR
+Parent Project: AI chatbot
+
+--Research--
+TLDR: Checking out different web game engines, reading documentation for playcanvas to see what features are built in
+Date Started: May 6, 2019
+Date Finished: May 9, 2019
+
+--Experimentation--
+TLDR: Trying out the playcanvas web editor, also looking at playcanvas code both from the editor and project. 
+To see how it is organised and how to recreate procedurally it without the editor
+Date Started: May 8, 2019
+Date Finished: May 9, 2019
+
+--Initial Development--
+TLDR: Setup the development environment, the github project 
+Date Started: May 9, 2019
+Date Finished: May 9, 2019
+Could Improve: Create a todo list for all work that needs to be completed, and a diary of daily work and thoughts
+
+--Creation of MVP--
+TLDR: Streaming of vertex models from the server to be rendered on the playcanvas frontend
+Date Started: May 9, 2019
+Date Finished: May 14, 2019
+
+--Additional Features--
+TLDR: Streaming project human, texture streaming, virtual ni ui, first person camera, VR, raycasting, in game links, ai chatbot UI 
+Date Started: May 16, 2019
+Date Finished: May 31, 2019
+
+--Wrap Up--
+TLDR: Refactoring, adding comments
+Date Started: May 30, 2019
+Date Finished: May 31, 2019
